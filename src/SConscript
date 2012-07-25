@@ -1,8 +1,8 @@
 GTEST_DIR = 'third_party/gtest-1.6.0'
 
-env = Environment(CXXFLAGS = '-Wall -Wextra')
+env = Environment(CXXFLAGS = '-g -Wall -Wextra -pedantic -std=c++0x')
 envTest = Environment(CPPPATH = [GTEST_DIR, GTEST_DIR + '/include'],
-                      CXXFLAGS = '-g -Wall -Wextra')
+                      CXXFLAGS = '-g -Wall -Wextra -pedantic -std=c++0x')
 
 envTest.Library(target = 'gtest',
                 source = GTEST_DIR + '/src/gtest-all.cc')
@@ -12,14 +12,31 @@ envTest.Library(target = 'gtest_main',
 
 env.Library(target = 'libsk',
             source = [
-                'libsk/base64.cc',
-                'libsk/mt_random.cc',
-                'libsk/sha.cc',
-                'libsk/varint.cc',
-                ])
+              'libsk/base64.cc',
+              'libsk/bind_descriptor.cc',
+              'libsk/bind_entry.cc',
+              'libsk/blob_value.cc',
+              'libsk/boolean_value.cc',
+              'libsk/decimal_integer.cc',
+              'libsk/descriptor.cc',
+              'libsk/integer_value.cc',
+              'libsk/key_type_value.cc',
+              'libsk/log_entry.cc',
+              'libsk/mt_random.cc',
+              'libsk/rebinder_names_value.cc',
+              'libsk/services_value.cc',
+              'libsk/sha.cc',
+              'libsk/slice.cc',
+              'libsk/string_value.cc',
+              'libsk/timestamp_value.cc',
+              'libsk/value.cc',
+              'libsk/varint.cc',
+              ])
 
 envTest.Program(target = 'libsk_tests',
-                source = Glob('libsk/*_unittest.cc'),
+                source = Glob('libsk/*_unittest.cc') + [
+                  'libsk/test_util.cc'
+                  ],
                 LIBS = ['libsk',
                         'ssl',
                         'crypto',

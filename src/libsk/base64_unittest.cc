@@ -15,15 +15,14 @@ namespace sk {
 namespace {
 string Encode(string data) {
   string result;
-  EncodeBase64(data, &result);
+  AppendBase64(data, &result);
   return result;
 }
 
 string Decode(string data) {
   string result;
-  if (!DecodeBase64(data, &result)) {
+  if (!ReadBase64(data, &result))
     assert(0 && "Decode failed.");
-  }
   return result;
 }
 }  // namespace
@@ -54,35 +53,35 @@ TEST(Base64Test, DecodeErrors) {
   string unused;
 
   // The empty string is a valid encoding.
-  EXPECT_TRUE(DecodeBase64("", &unused));
+  EXPECT_TRUE(ReadBase64("", &unused));
 
   // An encoded string must be a multiple of 4 bytes long.
-  EXPECT_FALSE(DecodeBase64("Zg", &unused));
+  EXPECT_FALSE(ReadBase64("Zg", &unused));
 
   // Fail for invalid characters such as *.
   // Check each offset in the main decode loop and in the padding.
-  EXPECT_FALSE(DecodeBase64("*m9vYg==", &unused));
-  EXPECT_FALSE(DecodeBase64("Z*9vYg==", &unused));
-  EXPECT_FALSE(DecodeBase64("Zm*vYg==", &unused));
-  EXPECT_FALSE(DecodeBase64("Zm9*Yg==", &unused));
-  EXPECT_FALSE(DecodeBase64("*g==", &unused));
-  EXPECT_FALSE(DecodeBase64("Z*==", &unused));
-  EXPECT_FALSE(DecodeBase64("*m8=", &unused));
-  EXPECT_FALSE(DecodeBase64("Z*8=", &unused));
-  EXPECT_FALSE(DecodeBase64("Zm*=", &unused));
+  EXPECT_FALSE(ReadBase64("*m9vYg==", &unused));
+  EXPECT_FALSE(ReadBase64("Z*9vYg==", &unused));
+  EXPECT_FALSE(ReadBase64("Zm*vYg==", &unused));
+  EXPECT_FALSE(ReadBase64("Zm9*Yg==", &unused));
+  EXPECT_FALSE(ReadBase64("*g==", &unused));
+  EXPECT_FALSE(ReadBase64("Z*==", &unused));
+  EXPECT_FALSE(ReadBase64("*m8=", &unused));
+  EXPECT_FALSE(ReadBase64("Z*8=", &unused));
+  EXPECT_FALSE(ReadBase64("Zm*=", &unused));
 
   // Only the last two bytes may be padding.
-  EXPECT_FALSE(DecodeBase64("=m9vYg==", &unused));
-  EXPECT_FALSE(DecodeBase64("Z=9vYg==", &unused));
-  EXPECT_FALSE(DecodeBase64("Zm=vYg==", &unused));
-  EXPECT_FALSE(DecodeBase64("Zm9=Yg==", &unused));
-  EXPECT_FALSE(DecodeBase64("=m9v", &unused));
-  EXPECT_FALSE(DecodeBase64("Z=9v", &unused));
-  EXPECT_FALSE(DecodeBase64("Zm=v", &unused));
-  EXPECT_FALSE(DecodeBase64("Z==v", &unused));
-  EXPECT_FALSE(DecodeBase64("===v", &unused));
-  EXPECT_FALSE(DecodeBase64("Z===", &unused));
-  EXPECT_FALSE(DecodeBase64("====", &unused));
+  EXPECT_FALSE(ReadBase64("=m9vYg==", &unused));
+  EXPECT_FALSE(ReadBase64("Z=9vYg==", &unused));
+  EXPECT_FALSE(ReadBase64("Zm=vYg==", &unused));
+  EXPECT_FALSE(ReadBase64("Zm9=Yg==", &unused));
+  EXPECT_FALSE(ReadBase64("=m9v", &unused));
+  EXPECT_FALSE(ReadBase64("Z=9v", &unused));
+  EXPECT_FALSE(ReadBase64("Zm=v", &unused));
+  EXPECT_FALSE(ReadBase64("Z==v", &unused));
+  EXPECT_FALSE(ReadBase64("===v", &unused));
+  EXPECT_FALSE(ReadBase64("Z===", &unused));
+  EXPECT_FALSE(ReadBase64("====", &unused));
 }
 
 TEST(Base64Test, Randoms) {

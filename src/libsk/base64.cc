@@ -41,7 +41,7 @@ static const uint8_t kBase64ToNum[256] = {
 };
 }
 
-void EncodeBase64(Slice in, std::string* out) {
+void AppendBase64(Slice in, std::string* out) {
   // There will be 4 output bytes for every 3 input bytes, rounding up
   // with padding.
   out->reserve(out->capacity() + 4 * ((in.length() + 2) / 3));
@@ -67,7 +67,7 @@ void EncodeBase64(Slice in, std::string* out) {
   }
 }
 
-bool DecodeBase64(Slice in, std::string* out) {
+bool ReadBase64(Slice in, std::string* out) {
   // There will be 3 bytes for every 4 input bytes, except padding.
   out->reserve(out->capacity() + 3 * (in.length() / 4));
   while (in.length() > 4) {
