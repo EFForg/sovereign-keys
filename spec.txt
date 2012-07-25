@@ -70,6 +70,7 @@ timestamp,
 
 <Stamp fields> :=
   SN: <integer, incrementing local serial number>
+  TID: <integer, this timeline's ID number>
   Timestamp: <monotonically non-decreasing timestamp>
 
 The identity of a timeline is implied by its Signature which is only

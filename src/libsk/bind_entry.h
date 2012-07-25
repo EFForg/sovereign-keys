@@ -43,6 +43,8 @@ class BindV1Entry : public LogEntry {
       VALUE(Services, BindDescriptor::kV1Services), services);
   PROPERTY(const std::string&, signature,
       VALUE(Blob, BindDescriptor::kV1Signature), data);
+  PROPERTY(uint64_t, tid,
+      VALUE(Integer, BindDescriptor::kV1TID), value);
   PROPERTY(uint32_t, timestamp,
       VALUE(Timestamp, BindDescriptor::kV1Timestamp), timestamp);
 };

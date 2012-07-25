@@ -26,6 +26,7 @@ const Field kBindV1Fields[] = {
   { "SN", Value::INTEGER },
   { "Services", Value::SERVICES },
   { "Signature", Value::BLOB },
+  { "TID", Value::INTEGER },
   { "Timestamp", Value::TIMESTAMP },
 };
 }  // namespace

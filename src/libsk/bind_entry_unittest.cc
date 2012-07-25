@@ -26,6 +26,7 @@ TEST(BindEntryTest, Accessors) {
     "SN: 42\n"
     "Services: https\n"
     "Signature: Li4u\n"
+    "TID: 0\n"
     "Timestamp: 1342885825\n"
     "\n"));
   ASSERT_TRUE(entry.get() != NULL);
@@ -47,6 +48,7 @@ TEST(BindEntryTest, Accessors) {
   EXPECT_EQ("", entry->services()[0].port);
   EXPECT_EQ(0U, entry->services()[0].alternate_routes.size());
   EXPECT_EQ("...", entry->signature());
+  EXPECT_EQ(0U, entry->tid());
   EXPECT_EQ(1342885825U, entry->timestamp());
 }
 

@@ -33,7 +33,8 @@ class BindDescriptor : public Descriptor {
     kV1SN = 7,
     kV1Services = 8,
     kV1Signature = 9,
-    kV1Timestamp = 10
+    kV1TID = 10,
+    kV1Timestamp = 11
   };
 
   explicit BindDescriptor(int version);
