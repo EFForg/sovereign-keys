@@ -14,13 +14,18 @@ namespace sk {
 namespace {
 string Encode(uint64_t value) {
   string result;
-  EncodeVarint(value, &result);
+  AppendVarint(value, &result);
   return result;
+}
+
+bool Read(string str, uint64_t* value) {
+  Slice in(str);
+  return ReadVarint(&in, value);
 }
 
 uint64_t Decode(string value) {
   uint64_t result;
-  if (!DecodeVarint(value, &result)) {
+  if (!Read(value, &result)) {
     assert(0 && "Decode failed.");
   }
   return result;
@@ -72,22 +77,22 @@ TEST(VarintTest, DecodeErrors) {
   uint64_t unused;
 
   // The empty string is not a valid encoding.
-  EXPECT_FALSE(DecodeVarint("", &unused));
+  EXPECT_FALSE(Read("", &unused));
 
   // Fail for truncated varints.
-  EXPECT_FALSE(DecodeVarint(string(1, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(2, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(3, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(4, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(5, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(6, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(7, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(8, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(9, 0x80), &unused));
-  EXPECT_FALSE(DecodeVarint(string(10, 0x80), &unused));
+  EXPECT_FALSE(Read(string(1, 0x80), &unused));
+  EXPECT_FALSE(Read(string(2, 0x80), &unused));
+  EXPECT_FALSE(Read(string(3, 0x80), &unused));
+  EXPECT_FALSE(Read(string(4, 0x80), &unused));
+  EXPECT_FALSE(Read(string(5, 0x80), &unused));
+  EXPECT_FALSE(Read(string(6, 0x80), &unused));
+  EXPECT_FALSE(Read(string(7, 0x80), &unused));
+  EXPECT_FALSE(Read(string(8, 0x80), &unused));
+  EXPECT_FALSE(Read(string(9, 0x80), &unused));
+  EXPECT_FALSE(Read(string(10, 0x80), &unused));
 
   // Fail for varints that are too long to represent in 64 bits.
-  EXPECT_FALSE(DecodeVarint("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x01",
-                            &unused));
+  EXPECT_FALSE(Read("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x01",
+                    &unused));
 }
 }

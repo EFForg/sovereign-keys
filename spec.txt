@@ -104,7 +104,7 @@ So a bind entry looks like
   <Bind fields>
   Signature: <binary, base64 encoded>
 
-SK-Signature MUST BE computed by the registrant over <Bind fields>.
+SK-Signature MUST be computed by the registrant over <Bind fields>.
 
 1.2.4.2. Unbind.
 
@@ -178,13 +178,18 @@ provided by the domain which MUST use its SK, e.g.
 
 Services: https,smtps,imaps
 
-The special value "all" means the SK should be used for all services.
+The special value "all" means the SK MUST be used for all services
+hosted on the domain.
 
 Each service name MAY be suffixed with a colon and a non-default port
 number, e.g. https:8080. Each service name MAY also contain a
 semicolon delimited list of alternate routes for the service. The
-syntax of alternate routes is undefined, except that they MUST NOT
-contain a semicolon.
+syntax of alternate routes is undefined, except that any specified
+MUST be non-empty and MUST NOT contain a semicolon or comma. Note that
+routes MAY contain colons, for example port numbers or IPv6 addresses.
+
+Since alternate routes are per-service, it is not possible to specify
+alternate routes when Services has the value "all".
 
 1.3.2. Rebinder-Names field.
 

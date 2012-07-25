@@ -9,32 +9,35 @@
 
 namespace sk {
 
-// |MTRandom| implements Mersenne twister MT19937-64, a pseudo-random
+// MTRandom implements Mersenne twister MT19937-64, a pseudo-random
 // number generator that returns 64 bit values. It is provided to make
 // tests that depend on pseudo-random numbers portable. It may also be
 // useful for algorithmic randomization.
 //
 // This class is NOT safe for cryptographic use.
 class MTRandom {
-  public:
-    MTRandom();
+ public:
+  MTRandom();
 
-    // Seeds the generator with |value|.
-    void Seed(uint64_t value);
+  // Seeds the generator with |value|.
+  void Seed(uint64_t value);
 
-    // Returns the next pseudo-random value.
-    uint64_t GetRandom();
+  // Returns the next pseudo-random value.
+  uint64_t GetRandom();
 
-  protected:
-    static const int kMT19937_64StateSize = 312;
+ protected:
+  static const int kMT19937_64StateSize = 312;
 
-  private:
-    DISALLOW_EVIL_CONSTRUCTORS(MTRandom);
+ private:
+  DISALLOW_EVIL_CONSTRUCTORS(MTRandom);
 
-    void GenerateState();
+  void GenerateState();
 
-    uint64_t state_[kMT19937_64StateSize];
-    int pos_;
+  // The current state vector.
+  uint64_t state_[kMT19937_64StateSize];
+
+  // The index of the next integer to return from state_.
+  int pos_;
 };
 }  // namespace sk
 
