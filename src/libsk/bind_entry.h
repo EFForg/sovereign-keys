@@ -10,43 +10,43 @@
 
 namespace sk {
 
-// Provides simplified accessors for version 1 Bind entries.
-class BindV1Entry : public LogEntry {
+// Provides simplified accessors for Bind entries.
+class BindEntry : public LogEntry {
  public:
-  virtual ~BindV1Entry();
+  virtual ~BindEntry();
 
-  static BindV1Entry* ParseText(Slice in) {
-    return static_cast<BindV1Entry*>(LogEntry::ParseText(in));
+  static BindEntry* ParseText(Slice in) {
+    return static_cast<BindEntry*>(LogEntry::ParseText(in));
   }
 
-  static BindV1Entry* ParseBinary(Slice* in) {
-    return static_cast<BindV1Entry*>(LogEntry::ParseBinary(in));
+  static BindEntry* ParseBinary(Slice* in) {
+    return static_cast<BindEntry*>(LogEntry::ParseBinary(in));
   }
 
   PROPERTY(const std::string&, ca_cert_chain,
-      VALUE(Blob, BindDescriptor::kV1CACertChain), data);
+      VALUE(Blob, BindDescriptor::kCACertChain), data);
   PROPERTY(bool, includes_subdomains,
-      VALUE(Boolean, BindDescriptor::kV1IncludesSubdomains), value);
+      VALUE(Boolean, BindDescriptor::kIncludesSubdomains), value);
   PROPERTY(const std::string&, key,
-      VALUE(Blob, BindDescriptor::kV1Key), data);
+      VALUE(Blob, BindDescriptor::kKey), data);
   PROPERTY(KeyTypeValue::KeyType, key_type,
-      VALUE(KeyType, BindDescriptor::kV1KeyType), key_type);
+      VALUE(KeyType, BindDescriptor::kKeyType), key_type);
   PROPERTY(const std::string&, name,
-      VALUE(String, BindDescriptor::kV1Name), text);
+      VALUE(String, BindDescriptor::kName), text);
   PROPERTY(const std::vector<std::string>&, rebinder_names,
-      VALUE(RebinderNames, BindDescriptor::kV1RebinderNames), rebinder_names);
+      VALUE(RebinderNames, BindDescriptor::kRebinderNames), rebinder_names);
   PROPERTY(const std::string&, sk_signature,
-      VALUE(Blob, BindDescriptor::kV1SKSignature), data);
+      VALUE(Blob, BindDescriptor::kSKSignature), data);
   PROPERTY(uint64_t, sn,
-      VALUE(Integer, BindDescriptor::kV1SN), value);
+      VALUE(Integer, BindDescriptor::kSN), value);
   PROPERTY(const std::vector<Service>&, services,
-      VALUE(Services, BindDescriptor::kV1Services), services);
+      VALUE(Services, BindDescriptor::kServices), services);
   PROPERTY(const std::string&, signature,
-      VALUE(Blob, BindDescriptor::kV1Signature), data);
+      VALUE(Blob, BindDescriptor::kSignature), data);
   PROPERTY(uint64_t, tid,
-      VALUE(Integer, BindDescriptor::kV1TID), value);
+      VALUE(Integer, BindDescriptor::kTID), value);
   PROPERTY(uint32_t, timestamp,
-      VALUE(Timestamp, BindDescriptor::kV1Timestamp), timestamp);
+      VALUE(Timestamp, BindDescriptor::kTimestamp), timestamp);
 };
 }  // namespace sk
 

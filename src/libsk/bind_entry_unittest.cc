@@ -14,7 +14,7 @@ using std::unique_ptr;
 namespace sk {
 
 TEST(BindEntryTest, Accessors) {
-  unique_ptr<BindV1Entry> entry(BindV1Entry::ParseText(
+  unique_ptr<BindEntry> entry(BindEntry::ParseText(
     "Bind: 1\n"
     "CA-Cert-Chain: Li4u\n"
     "Includes-Subdomains: 0\n"

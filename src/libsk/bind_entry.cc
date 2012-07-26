@@ -4,7 +4,7 @@
 
 namespace sk {
 
-BindV1Entry::~BindV1Entry() {
+BindEntry::~BindEntry() {
 }
 
 }  // namespace sk

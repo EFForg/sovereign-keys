@@ -1,7 +1,7 @@
 // Copyright 2012 the SK authors. All rights reserved.
 
-#ifndef LIBSK_BIND_DESCRIPTOR_H_
-#define LIBSK_BIND_DESCRIPTOR_H_
+#ifndef LIBSK_REBIND_DESCRIPTOR_H_
+#define LIBSK_REBIND_DESCRIPTOR_H_
 
 #include <stddef.h>
 #include <vector>
@@ -12,8 +12,8 @@ namespace sk {
 
 class Field;
 
-// Describes the fields in a Bind log entry (see BindEntry).
-class BindDescriptor : public Descriptor {
+// Describes the fields in a Rebind log entry (see RebindEntry).
+class RebindDescriptor : public Descriptor {
  public:
   // The type name for plaintext serialization.
   static const char* const kTypeName;
@@ -28,17 +28,19 @@ class BindDescriptor : public Descriptor {
     kKey = 2,
     kKeyType = 3,
     kName = 4,
-    kRebinderNames = 5,
-    kSKSignature = 6,
-    kSN = 7,
-    kServices = 8,
-    kSignature = 9,
-    kTID = 10,
-    kTimestamp = 11
+    kRebinderName = 5,
+    kRebinderNames = 6,
+    kRebinderSignature = 7,
+    kSKSignature = 8,
+    kSN = 9,
+    kServices = 10,
+    kSignature = 11,
+    kTID = 12,
+    kTimestamp = 13
   };
 
-  explicit BindDescriptor(int version);
-  virtual ~BindDescriptor();
+  explicit RebindDescriptor(int version);
+  virtual ~RebindDescriptor();
 
   // Descriptor interface.
   virtual const char* GetTypeName() const OVERRIDE;
@@ -52,4 +54,4 @@ class BindDescriptor : public Descriptor {
 
 }  // namespace sk
 
-#endif  // LIBSK_BIND_DESCRIPTOR_H_
+#endif  // LIBSK_REBIND_DESCRIPTOR_H_

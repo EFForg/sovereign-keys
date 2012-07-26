@@ -20,7 +20,7 @@ TEST(BindDescriptorTest, Sanity) {
       unique_ptr<BindDescriptor> desc(new BindDescriptor(version));
       ASSERT_TRUE(desc.get() != NULL);
       EXPECT_STREQ("Bind", desc->GetTypeName());
-      EXPECT_EQ(0, desc->GetTypeId());
+      EXPECT_EQ(1, desc->GetTypeId());
       EXPECT_LE(prev_version_num_fields, desc->GetNumFields());
       EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
       prev_version_num_fields = desc->GetNumFields();
@@ -28,31 +28,33 @@ TEST(BindDescriptorTest, Sanity) {
   }
 }
 
-TEST(BindDescriptorTest, V1FieldEnum) {
+TEST(BindDescriptorTest, Fields) {
   ASSERT_TRUE(BindDescriptor::IsVersionSupported(1));
   unique_ptr<BindDescriptor> desc(new BindDescriptor(1));
   EXPECT_STREQ("CA-Cert-Chain",
-      desc->GetField(BindDescriptor::kV1CACertChain).name);
+      desc->GetField(BindDescriptor::kCACertChain).name);
   EXPECT_STREQ("Includes-Subdomains",
-      desc->GetField(BindDescriptor::kV1IncludesSubdomains).name);
+      desc->GetField(BindDescriptor::kIncludesSubdomains).name);
   EXPECT_STREQ("Key",
-      desc->GetField(BindDescriptor::kV1Key).name);
+      desc->GetField(BindDescriptor::kKey).name);
   EXPECT_STREQ("Key-Type",
-      desc->GetField(BindDescriptor::kV1KeyType).name);
+      desc->GetField(BindDescriptor::kKeyType).name);
   EXPECT_STREQ("Name",
-      desc->GetField(BindDescriptor::kV1Name).name);
+      desc->GetField(BindDescriptor::kName).name);
   EXPECT_STREQ("Rebinder-Names",
-      desc->GetField(BindDescriptor::kV1RebinderNames).name);
+      desc->GetField(BindDescriptor::kRebinderNames).name);
   EXPECT_STREQ("SK-Signature",
-      desc->GetField(BindDescriptor::kV1SKSignature).name);
+      desc->GetField(BindDescriptor::kSKSignature).name);
   EXPECT_STREQ("SN",
-      desc->GetField(BindDescriptor::kV1SN).name);
+      desc->GetField(BindDescriptor::kSN).name);
   EXPECT_STREQ("Services",
-      desc->GetField(BindDescriptor::kV1Services).name);
+      desc->GetField(BindDescriptor::kServices).name);
   EXPECT_STREQ("Signature",
-      desc->GetField(BindDescriptor::kV1Signature).name);
+      desc->GetField(BindDescriptor::kSignature).name);
+  EXPECT_STREQ("TID",
+      desc->GetField(BindDescriptor::kTID).name);
   EXPECT_STREQ("Timestamp",
-      desc->GetField(BindDescriptor::kV1Timestamp).name);
+      desc->GetField(BindDescriptor::kTimestamp).name);
 }
 
 }  // namespace sk

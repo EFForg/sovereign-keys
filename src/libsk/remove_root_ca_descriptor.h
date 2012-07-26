@@ -1,7 +1,7 @@
 // Copyright 2012 the SK authors. All rights reserved.
 
-#ifndef LIBSK_BIND_DESCRIPTOR_H_
-#define LIBSK_BIND_DESCRIPTOR_H_
+#ifndef LIBSK_REMOVE_ROOT_CA_DESCRIPTOR_H_
+#define LIBSK_REMOVE_ROOT_CA_DESCRIPTOR_H_
 
 #include <stddef.h>
 #include <vector>
@@ -12,33 +12,23 @@ namespace sk {
 
 class Field;
 
-// Describes the fields in a Bind log entry (see BindEntry).
-class BindDescriptor : public Descriptor {
+// Describes the fields in a Remove-Root-CA log entry (see RemoveRootCAEntry).
+class RemoveRootCADescriptor : public Descriptor {
  public:
   // The type name for plaintext serialization.
   static const char* const kTypeName;
 
-  // The type code for binary serialization.
-  static const int kTypeId;
-
   // Indices of fields, used for fast accessors.
   enum {
-    kCACertChain = 0,
-    kIncludesSubdomains = 1,
-    kKey = 2,
-    kKeyType = 3,
-    kName = 4,
-    kRebinderNames = 5,
-    kSKSignature = 6,
-    kSN = 7,
-    kServices = 8,
-    kSignature = 9,
-    kTID = 10,
-    kTimestamp = 11
+    kCACertHash = 0,
+    kSN = 1,
+    kSignature = 2,
+    kTID = 3,
+    kTimestamp = 4
   };
 
-  explicit BindDescriptor(int version);
-  virtual ~BindDescriptor();
+  explicit RemoveRootCADescriptor(int version);
+  virtual ~RemoveRootCADescriptor();
 
   // Descriptor interface.
   virtual const char* GetTypeName() const OVERRIDE;
@@ -52,4 +42,4 @@ class BindDescriptor : public Descriptor {
 
 }  // namespace sk
 
-#endif  // LIBSK_BIND_DESCRIPTOR_H_
+#endif  // LIBSK_REMOVE_ROOT_CA_DESCRIPTOR_H_
