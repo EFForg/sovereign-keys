@@ -1,3 +1,5 @@
+// Copyright 2012 the SK authors. All rights reserved.
+
 #include "test_util.h"
 
 #include <algorithm>

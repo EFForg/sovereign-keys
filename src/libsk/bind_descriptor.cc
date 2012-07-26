@@ -1,3 +1,5 @@
+// Copyright 2012 the SK authors. All rights reserved.
+
 #include "bind_descriptor.h"
 
 #include "descriptor.h"

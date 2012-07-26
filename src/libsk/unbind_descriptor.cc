@@ -1,3 +1,5 @@
+// Copyright 2012 the SK authors. All rights reserved.
+
 #include "unbind_descriptor.h"
 
 #include "descriptor.h"

@@ -1,3 +1,5 @@
+// Copyright 2012 the SK authors. All rights reserved.
+
 #ifndef LIBSK_DECIMAL_INTEGER_H_
 #define LIBSK_DECIMAL_INTEGER_H_
 

@@ -1,3 +1,5 @@
+// Copyright 2012 the SK authors. All rights reserved.
+
 #include "key_type_value.h"
 
 #include <ctype.h>
