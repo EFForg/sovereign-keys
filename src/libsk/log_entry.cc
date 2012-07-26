@@ -5,11 +5,16 @@
 #include <memory>
 #include <vector>
 
+#include "add_root_ca_descriptor.h"
 #include "bind_descriptor.h"
+#include "change_services_descriptor.h"
 #include "descriptor.h"
 #include "decimal_integer.h"
 #include "field.h"
+#include "rebind_descriptor.h"
+#include "remove_root_ca_descriptor.h"
 #include "slice.h"
+#include "unbind_descriptor.h"
 #include "value.h"
 
 namespace sk {
@@ -95,6 +100,21 @@ LogEntry* LogEntry::ParseText(Slice in) {
   if (pairs[0].first == BindDescriptor::kTypeName &&
       BindDescriptor::IsVersionSupported(version))
     return ParseTextFields(new BindDescriptor(version), pairs);
+  else if (pairs[0].first == ChangeServicesDescriptor::kTypeName &&
+      ChangeServicesDescriptor::IsVersionSupported(version))
+    return ParseTextFields(new ChangeServicesDescriptor(version), pairs);
+  else if (pairs[0].first == UnbindDescriptor::kTypeName &&
+      UnbindDescriptor::IsVersionSupported(version))
+    return ParseTextFields(new UnbindDescriptor(version), pairs);
+  else if (pairs[0].first == RebindDescriptor::kTypeName &&
+      RebindDescriptor::IsVersionSupported(version))
+    return ParseTextFields(new RebindDescriptor(version), pairs);
+  else if (pairs[0].first == AddRootCADescriptor::kTypeName &&
+           AddRootCADescriptor::IsVersionSupported(version))
+    return ParseTextFields(new AddRootCADescriptor(version), pairs);
+  else if (pairs[0].first == RemoveRootCADescriptor::kTypeName &&
+           RemoveRootCADescriptor::IsVersionSupported(version))
+    return ParseTextFields(new RemoveRootCADescriptor(version), pairs);
   return NULL;
 }
 
@@ -107,6 +127,15 @@ LogEntry* LogEntry::ParseBinary(Slice* in) {
   if (entry_type == BindDescriptor::kTypeId &&
       BindDescriptor::IsVersionSupported(version))
     return ParseBinaryFields(new BindDescriptor(version), in);
+  else if (entry_type == ChangeServicesDescriptor::kTypeId &&
+      ChangeServicesDescriptor::IsVersionSupported(version))
+    return ParseBinaryFields(new ChangeServicesDescriptor(version), in);
+  else if (entry_type == UnbindDescriptor::kTypeId &&
+      UnbindDescriptor::IsVersionSupported(version))
+    return ParseBinaryFields(new UnbindDescriptor(version), in);
+  else if (entry_type == RebindDescriptor::kTypeId &&
+      RebindDescriptor::IsVersionSupported(version))
+    return ParseBinaryFields(new RebindDescriptor(version), in);
   return NULL;
 }
 
