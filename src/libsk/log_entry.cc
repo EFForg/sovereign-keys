@@ -58,7 +58,8 @@ bool SplitFields(Slice in, std::vector<LogEntry::KeyValuePair>* pairs) {
 }  // namespace
 
 LogEntry::LogEntry(const Descriptor* descriptor)
-  : descriptor_(descriptor) {
+  : descriptor_(descriptor),
+    values_(descriptor->GetNumFields(), NULL) {
 }
 
 LogEntry::~LogEntry() {
@@ -150,7 +151,6 @@ LogEntry* LogEntry::ParseTextFields(
     return NULL;
   std::unique_ptr<LogEntry> entry(
       new LogEntry(descriptor_deleter.release()));
-  entry->values_.resize(num_fields, NULL);
   for (size_t i = 0; i < num_fields; i++) {
     const Field& spec = descriptor->GetField(i);
     if (!(pairs[i + 1].first == spec.name))
@@ -168,7 +168,6 @@ LogEntry* LogEntry::ParseBinaryFields(
     Slice* in) {
   std::unique_ptr<LogEntry> entry(new LogEntry(descriptor));
   const size_t num_fields = descriptor->GetNumFields();
-  entry->values_.resize(num_fields, NULL);
   for (size_t i = 0; i < num_fields; i++) {
     if (in->length() == 0)
       // Truncated.

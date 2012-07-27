@@ -20,7 +20,6 @@ class IntegerValue : public Value {
   virtual ~IntegerValue();
 
   uint64_t value() const { return value_; }
-  void set_value(uint64_t value) { value_ = value; }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;

@@ -20,7 +20,6 @@ class TimestampValue : public Value {
   virtual ~TimestampValue();
 
   uint32_t timestamp() const { return timestamp_; }
-  void set_timestamp(uint32_t timestamp) { timestamp_ = timestamp; }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;

@@ -15,19 +15,14 @@
 #include "string_value.h"
 #include "timestamp_value.h"
 
-// Generates code to retrieve a Value pointer of derived class |type| from 
-// field number |index| in a log entry.
-#define VALUE(type, index) \
-  reinterpret_cast<type##Value*>(value(index))
-
 // Generates getter and setter methods for a value named |name| with native
 // type |raw_type|.
-#define PROPERTY(raw_type, name, value, accessor) \
+#define PROPERTY(raw_type, name, value_prefix, index, getter) \
   raw_type name() { \
-    return value->accessor(); \
+    return reinterpret_cast<value_prefix##Value*>(value(index))->getter(); \
   } \
   void set_##name(raw_type raw) { \
-    value->set_##accessor(raw); \
+    set_value(index, new value_prefix##Value(raw)); \
   }
 
 #endif  // VALUE_ACCESSORS_H_

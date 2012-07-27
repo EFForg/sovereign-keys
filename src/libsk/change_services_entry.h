@@ -13,6 +13,7 @@ namespace sk {
 // Provides simplified accessors for ChangeServices entries.
 class ChangeServicesEntry : public LogEntry {
  public:
+  explicit ChangeServicesEntry(int version);
   virtual ~ChangeServicesEntry();
 
   static ChangeServicesEntry* ParseText(Slice in) {
@@ -24,19 +25,19 @@ class ChangeServicesEntry : public LogEntry {
   }
 
   PROPERTY(const std::string&, name,
-      VALUE(String, ChangeServicesDescriptor::kName), text);
+           String, ChangeServicesDescriptor::kName, text);
   PROPERTY(const std::string&, sk_signature,
-      VALUE(Blob, ChangeServicesDescriptor::kSKSignature), data);
+           Blob, ChangeServicesDescriptor::kSKSignature, data);
   PROPERTY(uint64_t, sn,
-      VALUE(Integer, ChangeServicesDescriptor::kSN), value);
+           Integer, ChangeServicesDescriptor::kSN, value);
   PROPERTY(const std::vector<Service>&, services,
-      VALUE(Services, ChangeServicesDescriptor::kServices), services);
+           Services, ChangeServicesDescriptor::kServices, services);
   PROPERTY(const std::string&, signature,
-      VALUE(Blob, ChangeServicesDescriptor::kSignature), data);
+           Blob, ChangeServicesDescriptor::kSignature, data);
   PROPERTY(uint64_t, tid,
-      VALUE(Integer, ChangeServicesDescriptor::kTID), value);
+           Integer, ChangeServicesDescriptor::kTID, value);
   PROPERTY(uint32_t, timestamp,
-      VALUE(Timestamp, ChangeServicesDescriptor::kTimestamp), timestamp);
+           Timestamp, ChangeServicesDescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk
 

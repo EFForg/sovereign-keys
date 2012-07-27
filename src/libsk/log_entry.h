@@ -8,12 +8,12 @@
 #include <vector>
 
 #include "util.h"
+#include "value.h"
 
 namespace sk {
 
 class Descriptor;
 class Slice;
-class Value;
 
 // LogEntry is the parent class for records in the SK distributed log.
 // This class handles serialization and provides generic value accessors.
@@ -31,13 +31,20 @@ class LogEntry {
   const Descriptor* descriptor() const { return descriptor_; }
 
  protected:
+  // Takes ownership of descriptor.
+  explicit LogEntry(const Descriptor* descriptor);
+
+  // Retains ownership of returned pointer.
   Value* value(size_t i) const { return values_[i]; }
+
+  // Takes ownership of value.
+  void set_value(size_t i, Value* value) {
+    delete values_[i];
+    values_[i] = value;
+  }
 
  private:
   DISALLOW_EVIL_CONSTRUCTORS(LogEntry);
-
-  // Takes ownership of descriptor.
-  explicit LogEntry(const Descriptor* descriptor);
 
   static LogEntry* ParseTextFields(
       const Descriptor* descriptor,

@@ -33,9 +33,6 @@ class ServicesValue : public Value {
   virtual ~ServicesValue();
 
   const std::vector<Service>& services() const { return services_; }
-  void set_services(const std::vector<Service>& services) {
-    services_ = services;
-  }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;

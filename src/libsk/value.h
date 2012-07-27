@@ -9,7 +9,7 @@ namespace sk {
 
 class Slice;
 
-// Interface for accessing field data.
+// Interface for accessing field data. Value type instances are immutable.
 class Value {
  public:
   // Possible types of values. Used in log entry descriptors to specify the

@@ -21,9 +21,6 @@ class RebinderNamesValue : public Value {
   virtual ~RebinderNamesValue();
 
   const std::vector<std::string>& rebinder_names() const { return names_; }
-  void set_rebinder_names(const std::vector<std::string>& names) {
-    names_ = names;
-  }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;

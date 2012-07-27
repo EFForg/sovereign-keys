@@ -2,7 +2,13 @@
 
 #include "remove_root_ca_entry.h"
 
+#include "remove_root_ca_descriptor.h"
+
 namespace sk {
+
+RemoveRootCAEntry::RemoveRootCAEntry(int version)
+  : LogEntry(new RemoveRootCADescriptor(version)) {
+}
 
 RemoveRootCAEntry::~RemoveRootCAEntry() {
 }

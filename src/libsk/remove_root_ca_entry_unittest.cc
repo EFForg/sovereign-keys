@@ -35,4 +35,24 @@ TEST(RemoveRootCAEntryTest, Accessors) {
   EXPECT_EQ(1342885825U, entry->timestamp());
 }
 
+TEST(RemoveRootCAEntryTest, Setters) {
+  unique_ptr<RemoveRootCAEntry> entry(new RemoveRootCAEntry(1));
+  entry->set_ca_cert_hash("...");
+  entry->set_sn(42);
+  entry->set_signature("...");
+  entry->set_tid(0);
+  entry->set_timestamp(1342885825);
+  string out;
+  entry->AppendText(&out);
+  EXPECT_EQ(
+    "Remove-Root-CA: 1\n"
+    "CA-Cert-Hash: Li4u\n"
+    "SN: 42\n"
+    "Signature: Li4u\n"
+    "TID: 0\n"
+    "Timestamp: 1342885825\n"
+    "\n",
+    out);
+}
+
 }  // namespace sk

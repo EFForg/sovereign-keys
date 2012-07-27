@@ -13,6 +13,7 @@ namespace sk {
 // Provides simplified accessors for Unbind entries.
 class UnbindEntry : public LogEntry {
  public:
+  explicit UnbindEntry(int version);
   virtual ~UnbindEntry();
 
   static UnbindEntry* ParseText(Slice in) {
@@ -24,19 +25,19 @@ class UnbindEntry : public LogEntry {
   }
 
   PROPERTY(uint32_t, last_secure_timestamp,
-      VALUE(Timestamp, UnbindDescriptor::kLastSecureTimestamp), timestamp);
+           Timestamp, UnbindDescriptor::kLastSecureTimestamp, timestamp);
   PROPERTY(const std::string&, name,
-      VALUE(String, UnbindDescriptor::kName), text);
+           String, UnbindDescriptor::kName, text);
   PROPERTY(const std::string&, sk_signature,
-      VALUE(Blob, UnbindDescriptor::kSKSignature), data);
+           Blob, UnbindDescriptor::kSKSignature, data);
   PROPERTY(uint64_t, sn,
-      VALUE(Integer, UnbindDescriptor::kSN), value);
+           Integer, UnbindDescriptor::kSN, value);
   PROPERTY(const std::string&, signature,
-      VALUE(Blob, UnbindDescriptor::kSignature), data);
+           Blob, UnbindDescriptor::kSignature, data);
   PROPERTY(uint64_t, tid,
-      VALUE(Integer, UnbindDescriptor::kTID), value);
+           Integer, UnbindDescriptor::kTID, value);
   PROPERTY(uint32_t, timestamp,
-      VALUE(Timestamp, UnbindDescriptor::kTimestamp), timestamp);
+           Timestamp, UnbindDescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk
 

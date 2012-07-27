@@ -13,6 +13,7 @@ namespace sk {
 // Provides simplified accessors for RemoveRootCA entries.
 class RemoveRootCAEntry : public LogEntry {
  public:
+  explicit RemoveRootCAEntry(int version);
   virtual ~RemoveRootCAEntry();
 
   static RemoveRootCAEntry* ParseText(Slice in) {
@@ -24,15 +25,15 @@ class RemoveRootCAEntry : public LogEntry {
   }
 
   PROPERTY(const std::string&, ca_cert_hash,
-      VALUE(Blob, RemoveRootCADescriptor::kCACertHash), data);
+           Blob, RemoveRootCADescriptor::kCACertHash, data);
   PROPERTY(uint64_t, sn,
-      VALUE(Integer, RemoveRootCADescriptor::kSN), value);
+           Integer, RemoveRootCADescriptor::kSN, value);
   PROPERTY(const std::string&, signature,
-      VALUE(Blob, RemoveRootCADescriptor::kSignature), data);
+           Blob, RemoveRootCADescriptor::kSignature, data);
   PROPERTY(uint64_t, tid,
-      VALUE(Integer, RemoveRootCADescriptor::kTID), value);
+           Integer, RemoveRootCADescriptor::kTID, value);
   PROPERTY(uint32_t, timestamp,
-      VALUE(Timestamp, RemoveRootCADescriptor::kTimestamp), timestamp);
+           Timestamp, RemoveRootCADescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk
 

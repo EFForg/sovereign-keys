@@ -2,7 +2,13 @@
 
 #include "rebind_entry.h"
 
+#include "rebind_descriptor.h"
+
 namespace sk {
+
+RebindEntry::RebindEntry(int version)
+  : LogEntry(new RebindDescriptor(version)) {
+}
 
 RebindEntry::~RebindEntry() {
 }

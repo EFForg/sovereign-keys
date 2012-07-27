@@ -19,7 +19,6 @@ class StringValue : public Value {
   virtual ~StringValue();
 
   const std::string& text() const { return text_; }
-  void set_text(const std::string& text) { text_ = text; }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;

@@ -22,7 +22,6 @@ class KeyTypeValue : public Value {
   virtual ~KeyTypeValue();
 
   KeyType key_type() const { return type_; }
-  void set_key_type(KeyType type) { type_ = type; }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;

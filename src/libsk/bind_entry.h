@@ -13,6 +13,7 @@ namespace sk {
 // Provides simplified accessors for Bind entries.
 class BindEntry : public LogEntry {
  public:
+  explicit BindEntry(int version);
   virtual ~BindEntry();
 
   static BindEntry* ParseText(Slice in) {
@@ -24,29 +25,29 @@ class BindEntry : public LogEntry {
   }
 
   PROPERTY(const std::string&, ca_cert_chain,
-      VALUE(Blob, BindDescriptor::kCACertChain), data);
+           Blob, BindDescriptor::kCACertChain, data);
   PROPERTY(bool, includes_subdomains,
-      VALUE(Boolean, BindDescriptor::kIncludesSubdomains), value);
+           Boolean, BindDescriptor::kIncludesSubdomains, value);
   PROPERTY(const std::string&, key,
-      VALUE(Blob, BindDescriptor::kKey), data);
+           Blob, BindDescriptor::kKey, data);
   PROPERTY(KeyTypeValue::KeyType, key_type,
-      VALUE(KeyType, BindDescriptor::kKeyType), key_type);
+           KeyType, BindDescriptor::kKeyType, key_type);
   PROPERTY(const std::string&, name,
-      VALUE(String, BindDescriptor::kName), text);
+           String, BindDescriptor::kName, text);
   PROPERTY(const std::vector<std::string>&, rebinder_names,
-      VALUE(RebinderNames, BindDescriptor::kRebinderNames), rebinder_names);
+           RebinderNames, BindDescriptor::kRebinderNames, rebinder_names);
   PROPERTY(const std::string&, sk_signature,
-      VALUE(Blob, BindDescriptor::kSKSignature), data);
+           Blob, BindDescriptor::kSKSignature, data);
   PROPERTY(uint64_t, sn,
-      VALUE(Integer, BindDescriptor::kSN), value);
+           Integer, BindDescriptor::kSN, value);
   PROPERTY(const std::vector<Service>&, services,
-      VALUE(Services, BindDescriptor::kServices), services);
+           Services, BindDescriptor::kServices, services);
   PROPERTY(const std::string&, signature,
-      VALUE(Blob, BindDescriptor::kSignature), data);
+           Blob, BindDescriptor::kSignature, data);
   PROPERTY(uint64_t, tid,
-      VALUE(Integer, BindDescriptor::kTID), value);
+           Integer, BindDescriptor::kTID, value);
   PROPERTY(uint32_t, timestamp,
-      VALUE(Timestamp, BindDescriptor::kTimestamp), timestamp);
+           Timestamp, BindDescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk
 

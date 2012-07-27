@@ -19,7 +19,6 @@ class BooleanValue : public Value {
   virtual ~BooleanValue();
 
   bool value() const { return value_; }
-  void set_value(bool value) { value_ = value; }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;

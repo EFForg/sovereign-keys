@@ -13,6 +13,7 @@ namespace sk {
 // Provides simplified accessors for AddRootCA entries.
 class AddRootCAEntry : public LogEntry {
  public:
+  explicit AddRootCAEntry(int version);
   virtual ~AddRootCAEntry();
 
   static AddRootCAEntry* ParseText(Slice in) {
@@ -24,15 +25,15 @@ class AddRootCAEntry : public LogEntry {
   }
 
   PROPERTY(const std::string&, ca_cert,
-      VALUE(Blob, AddRootCADescriptor::kCACert), data);
+           Blob, AddRootCADescriptor::kCACert, data);
   PROPERTY(uint64_t, sn,
-      VALUE(Integer, AddRootCADescriptor::kSN), value);
+           Integer, AddRootCADescriptor::kSN, value);
   PROPERTY(const std::string&, signature,
-      VALUE(Blob, AddRootCADescriptor::kSignature), data);
+           Blob, AddRootCADescriptor::kSignature, data);
   PROPERTY(uint64_t, tid,
-      VALUE(Integer, AddRootCADescriptor::kTID), value);
+           Integer, AddRootCADescriptor::kTID, value);
   PROPERTY(uint32_t, timestamp,
-      VALUE(Timestamp, AddRootCADescriptor::kTimestamp), timestamp);
+           Timestamp, AddRootCADescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk
 

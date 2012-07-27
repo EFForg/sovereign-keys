@@ -19,7 +19,6 @@ class BlobValue : public Value {
   virtual ~BlobValue();
 
   const std::string& data() const { return data_; }
-  void set_data(const std::string& str) { data_ = str; }
 
   // Value interface:
   virtual void AppendText(std::string* out) const OVERRIDE;
