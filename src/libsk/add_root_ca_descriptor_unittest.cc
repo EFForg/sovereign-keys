@@ -20,7 +20,7 @@ TEST(AddRootCADescriptorTest, Sanity) {
       unique_ptr<AddRootCADescriptor> desc(new AddRootCADescriptor(version));
       ASSERT_TRUE(desc.get() != NULL);
       EXPECT_STREQ("Add-Root-CA", desc->GetTypeName());
-      EXPECT_EQ(-1, desc->GetTypeId());
+      EXPECT_EQ(5, desc->GetTypeId());
       EXPECT_LE(prev_version_num_fields, desc->GetNumFields());
       EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
       prev_version_num_fields = desc->GetNumFields();

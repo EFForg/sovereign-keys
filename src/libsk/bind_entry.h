@@ -24,29 +24,29 @@ class BindEntry : public LogEntry {
     return static_cast<BindEntry*>(LogEntry::ParseBinary(in));
   }
 
-  PROPERTY(const std::string&, ca_cert_chain,
+  PROPERTY(, const std::string&, ca_cert_chain,
            Blob, BindDescriptor::kCACertChain, data);
-  PROPERTY(bool, includes_subdomains,
+  PROPERTY(, bool, includes_subdomains,
            Boolean, BindDescriptor::kIncludesSubdomains, value);
-  PROPERTY(const std::string&, key,
+  PROPERTY(, const std::string&, key,
            Blob, BindDescriptor::kKey, data);
-  PROPERTY(KeyTypeValue::KeyType, key_type,
+  PROPERTY(, KeyTypeValue::KeyType, key_type,
            KeyType, BindDescriptor::kKeyType, key_type);
-  PROPERTY(const std::string&, name,
+  PROPERTY(, const std::string&, name,
            String, BindDescriptor::kName, text);
-  PROPERTY(const std::vector<std::string>&, rebinder_names,
+  PROPERTY(, const std::vector<std::string>&, rebinder_names,
            RebinderNames, BindDescriptor::kRebinderNames, rebinder_names);
-  PROPERTY(const std::string&, sk_signature,
+  PROPERTY(, const std::string&, sk_signature,
            Blob, BindDescriptor::kSKSignature, data);
-  PROPERTY(uint64_t, sn,
+  PROPERTY(virtual, uint64_t, sn,
            Integer, BindDescriptor::kSN, value);
-  PROPERTY(const std::vector<Service>&, services,
+  PROPERTY(, const std::vector<Service>&, services,
            Services, BindDescriptor::kServices, services);
-  PROPERTY(const std::string&, signature,
+  PROPERTY(virtual, const std::string&, signature,
            Blob, BindDescriptor::kSignature, data);
-  PROPERTY(uint64_t, tid,
+  PROPERTY(virtual, uint64_t, tid,
            Integer, BindDescriptor::kTID, value);
-  PROPERTY(uint32_t, timestamp,
+  PROPERTY(virtual, uint32_t, timestamp,
            Timestamp, BindDescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk

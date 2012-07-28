@@ -12,6 +12,9 @@ namespace sk {
 // static
 const char* const RemoveRootCADescriptor::kTypeName = "Remove-Root-CA";
 
+// static
+const int RemoveRootCADescriptor::kTypeId = 7;
+
 namespace {
 const Field kRemoveRootCAFields[] = {
   // These must be sorted by field name.
@@ -35,7 +38,7 @@ const char* RemoveRootCADescriptor::GetTypeName() const {
 }
 
 int RemoveRootCADescriptor::GetTypeId() const {
-  return -1;
+  return kTypeId;
 }
 
 size_t RemoveRootCADescriptor::GetNumFields() const {

@@ -24,19 +24,19 @@ class UnbindEntry : public LogEntry {
     return static_cast<UnbindEntry*>(LogEntry::ParseBinary(in));
   }
 
-  PROPERTY(uint32_t, last_secure_timestamp,
+  PROPERTY(, uint32_t, last_secure_timestamp,
            Timestamp, UnbindDescriptor::kLastSecureTimestamp, timestamp);
-  PROPERTY(const std::string&, name,
+  PROPERTY(, const std::string&, name,
            String, UnbindDescriptor::kName, text);
-  PROPERTY(const std::string&, sk_signature,
+  PROPERTY(, const std::string&, sk_signature,
            Blob, UnbindDescriptor::kSKSignature, data);
-  PROPERTY(uint64_t, sn,
+  PROPERTY(virtual, uint64_t, sn,
            Integer, UnbindDescriptor::kSN, value);
-  PROPERTY(const std::string&, signature,
+  PROPERTY(virtual, const std::string&, signature,
            Blob, UnbindDescriptor::kSignature, data);
-  PROPERTY(uint64_t, tid,
+  PROPERTY(virtual, uint64_t, tid,
            Integer, UnbindDescriptor::kTID, value);
-  PROPERTY(uint32_t, timestamp,
+  PROPERTY(virtual, uint32_t, timestamp,
            Timestamp, UnbindDescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk

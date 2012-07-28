@@ -24,15 +24,15 @@ class AddRootCAEntry : public LogEntry {
     return static_cast<AddRootCAEntry*>(LogEntry::ParseBinary(in));
   }
 
-  PROPERTY(const std::string&, ca_cert,
+  PROPERTY(, const std::string&, ca_cert,
            Blob, AddRootCADescriptor::kCACert, data);
-  PROPERTY(uint64_t, sn,
+  PROPERTY(virtual, uint64_t, sn,
            Integer, AddRootCADescriptor::kSN, value);
-  PROPERTY(const std::string&, signature,
+  PROPERTY(virtual, const std::string&, signature,
            Blob, AddRootCADescriptor::kSignature, data);
-  PROPERTY(uint64_t, tid,
+  PROPERTY(virtual, uint64_t, tid,
            Integer, AddRootCADescriptor::kTID, value);
-  PROPERTY(uint32_t, timestamp,
+  PROPERTY(virtual, uint32_t, timestamp,
            Timestamp, AddRootCADescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk

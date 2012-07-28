@@ -17,11 +17,11 @@
 
 // Generates getter and setter methods for a value named |name| with native
 // type |raw_type|.
-#define PROPERTY(raw_type, name, value_prefix, index, getter) \
-  raw_type name() { \
+#define PROPERTY(v, raw_type, name, value_prefix, index, getter) \
+  v raw_type name() { \
     return reinterpret_cast<value_prefix##Value*>(value(index))->getter(); \
   } \
-  void set_##name(raw_type raw) { \
+  v void set_##name(raw_type raw) { \
     set_value(index, new value_prefix##Value(raw)); \
   }
 

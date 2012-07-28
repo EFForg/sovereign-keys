@@ -12,6 +12,9 @@ namespace sk {
 // static
 const char* const AddRootCADescriptor::kTypeName = "Add-Root-CA";
 
+// static
+const int AddRootCADescriptor::kTypeId = 6;
+
 namespace {
 const Field kAddRootCAFields[] = {
   // These must be sorted by field name.
@@ -35,7 +38,7 @@ const char* AddRootCADescriptor::GetTypeName() const {
 }
 
 int AddRootCADescriptor::GetTypeId() const {
-  return -1;
+  return kTypeId;
 }
 
 size_t AddRootCADescriptor::GetNumFields() const {

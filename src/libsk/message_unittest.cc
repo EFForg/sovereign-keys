@@ -1,6 +1,6 @@
 // Copyright 2012 the SK authors. All rights reserved.
 
-#include "log_entry.h"
+#include "message.h"
 
 #include <stdio.h>
 #include <string>
@@ -17,8 +17,8 @@ using std::unique_ptr;
 
 namespace sk {
 
-TEST(LogEntryTest, BindV1TextEncoding) {
-  unique_ptr<LogEntry> entry(LogEntry::ParseText(
+TEST(MessageTest, BindV1TextEncoding) {
+  unique_ptr<Message> entry(Message::ParseText(
     "Bind: 1\n"
     "CA-Cert-Chain: Li4u\n"
     "Includes-Subdomains: 0\n"
@@ -55,7 +55,7 @@ TEST(LogEntryTest, BindV1TextEncoding) {
     "\n", out);
 }
 
-TEST(LogEntryTest, BindV1BinaryEncoding) {
+TEST(MessageTest, BindV1BinaryEncoding) {
   const uint8_t kBindEntry[] = {
     0x01, 0x01, 0x03, 0x2e, 0x2e, 0x2e, 0x00, 0x03, 0x2e, 0x2e, 0x2e,
     0x01, 0x66, 0x6f, 0x6f, 0x2e, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c,
@@ -70,7 +70,7 @@ TEST(LogEntryTest, BindV1BinaryEncoding) {
       arraysize(kBindEntry));
   Slice in(data);
   Slice orig_in = in;
-  unique_ptr<LogEntry> entry(LogEntry::ParseBinary(&in));
+  unique_ptr<Message> entry(Message::ParseBinary(&in));
   ASSERT_TRUE(entry->descriptor() != NULL);
   EXPECT_STREQ("Bind", entry->descriptor()->GetTypeName());
   EXPECT_EQ(1, entry->descriptor()->GetVersion());

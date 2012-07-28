@@ -24,33 +24,33 @@ class RebindEntry : public LogEntry {
     return static_cast<RebindEntry*>(LogEntry::ParseBinary(in));
   }
 
-  PROPERTY(const std::string&, ca_cert_chain,
+  PROPERTY(, const std::string&, ca_cert_chain,
            Blob, RebindDescriptor::kCACertChain, data);
-  PROPERTY(bool, includes_subdomains,
+  PROPERTY(, bool, includes_subdomains,
            Boolean, RebindDescriptor::kIncludesSubdomains, value);
-  PROPERTY(const std::string&, key,
+  PROPERTY(, const std::string&, key,
            Blob, RebindDescriptor::kKey, data);
-  PROPERTY(KeyTypeValue::KeyType, key_type,
+  PROPERTY(, KeyTypeValue::KeyType, key_type,
            KeyType, RebindDescriptor::kKeyType, key_type);
-  PROPERTY(const std::string&, name,
+  PROPERTY(, const std::string&, name,
            String, RebindDescriptor::kName, text);
-  PROPERTY(const std::string&, rebinder_name,
+  PROPERTY(, const std::string&, rebinder_name,
            String, RebindDescriptor::kRebinderName, text);
-  PROPERTY(const std::vector<std::string>&, rebinder_names,
+  PROPERTY(, const std::vector<std::string>&, rebinder_names,
            RebinderNames, RebindDescriptor::kRebinderNames, rebinder_names);
-  PROPERTY(const std::string&, rebinder_signature,
+  PROPERTY(, const std::string&, rebinder_signature,
            Blob, RebindDescriptor::kRebinderSignature, data);
-  PROPERTY(const std::string&, sk_signature,
+  PROPERTY(, const std::string&, sk_signature,
            Blob, RebindDescriptor::kSKSignature, data);
-  PROPERTY(uint64_t, sn,
+  PROPERTY(virtual, uint64_t, sn,
            Integer, RebindDescriptor::kSN, value);
-  PROPERTY(const std::vector<Service>&, services,
+  PROPERTY(, const std::vector<Service>&, services,
            Services, RebindDescriptor::kServices, services);
-  PROPERTY(const std::string&, signature,
+  PROPERTY(virtual, const std::string&, signature,
            Blob, RebindDescriptor::kSignature, data);
-  PROPERTY(uint64_t, tid,
+  PROPERTY(virtual, uint64_t, tid,
            Integer, RebindDescriptor::kTID, value);
-  PROPERTY(uint32_t, timestamp,
+  PROPERTY(virtual, uint32_t, timestamp,
            Timestamp, RebindDescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk

@@ -24,19 +24,19 @@ class ChangeServicesEntry : public LogEntry {
     return static_cast<ChangeServicesEntry*>(LogEntry::ParseBinary(in));
   }
 
-  PROPERTY(const std::string&, name,
+  PROPERTY(, const std::string&, name,
            String, ChangeServicesDescriptor::kName, text);
-  PROPERTY(const std::string&, sk_signature,
+  PROPERTY(, const std::string&, sk_signature,
            Blob, ChangeServicesDescriptor::kSKSignature, data);
-  PROPERTY(uint64_t, sn,
+  PROPERTY(virtual, uint64_t, sn,
            Integer, ChangeServicesDescriptor::kSN, value);
-  PROPERTY(const std::vector<Service>&, services,
+  PROPERTY(, const std::vector<Service>&, services,
            Services, ChangeServicesDescriptor::kServices, services);
-  PROPERTY(const std::string&, signature,
+  PROPERTY(virtual, const std::string&, signature,
            Blob, ChangeServicesDescriptor::kSignature, data);
-  PROPERTY(uint64_t, tid,
+  PROPERTY(virtual, uint64_t, tid,
            Integer, ChangeServicesDescriptor::kTID, value);
-  PROPERTY(uint32_t, timestamp,
+  PROPERTY(virtual, uint32_t, timestamp,
            Timestamp, ChangeServicesDescriptor::kTimestamp, timestamp);
 };
 }  // namespace sk

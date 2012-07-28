@@ -18,6 +18,9 @@ class AddRootCADescriptor : public Descriptor {
   // The type name for plaintext serialization.
   static const char* const kTypeName;
 
+  // The type code for binary serialization.
+  static const int kTypeId;
+
   // Indices of fields, used for fast accessors.
   enum {
     kCACert = 0,

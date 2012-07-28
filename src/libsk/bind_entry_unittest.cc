@@ -8,7 +8,6 @@
 
 #include "gtest/gtest.h"
 #include "descriptor.h"
-#include "log_entry.h"
 #include "slice.h"
 
 using std::string;
