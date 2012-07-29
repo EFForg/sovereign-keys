@@ -2,26 +2,78 @@
 
 #include "message.h"
 
+#include <memory>
 #include <stdio.h>
 #include <string>
-#include <memory>
+#include <string.h>
 
 #include "gtest/gtest.h"
 #include "bind_descriptor.h"
 #include "descriptor.h"
 #include "slice.h"
+#include "test_util.h"
 #include "util.h"
 
+using sk::testing::Unhex;
 using std::string;
 using std::unique_ptr;
 
 namespace sk {
+namespace {
+Slice* TmpSlice(string value) {
+  static Slice in(value);
+  in = value;
+  return &in;
+}
+}  // namespace
 
-TEST(MessageTest, BindV1TextEncoding) {
-  unique_ptr<Message> entry(Message::ParseText(
+// These *Errors tests exercise each condition in message.cc where parsing
+// message text should fail. Since later conditions will generally reject
+// partial messages even if earlier conditions are defective, a debugger or
+// coverage tool should be used to verify these tests reliably.
+TEST(MessageTest, ParseTextErrors) {
+  unique_ptr<Message> msg(Message::ParseText(""));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText("\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText("Bind\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText("Bind: 1"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
+    "Bind\n"
+    "Value: hey\n"
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
+    "Bind: 1\n"
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
+    "Bind: 01\n"
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
+    "Bind: 1024\n"
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
+    "Not-A-Real-Message: 1\n"
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
+    "Bind: 42\n"
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
     "Bind: 1\n"
     "CA-Cert-Chain: Li4u\n"
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
+    "Bind: 1\n"
     "Includes-Subdomains: 0\n"
+    "CA-Cert-Chain: Li4u\n"
     "Key: Li4u\n"
     "Key-Type: ECC\n"
     "Name: foo.example.com\n"
@@ -33,15 +85,11 @@ TEST(MessageTest, BindV1TextEncoding) {
     "TID: 0\n"
     "Timestamp: 1342885825\n"
     "\n"));
-  ASSERT_TRUE(entry->descriptor() != NULL);
-  EXPECT_STREQ("Bind", entry->descriptor()->GetTypeName());
-  EXPECT_EQ(1, entry->descriptor()->GetVersion());
-  string out;
-  entry->AppendText(&out);
-  EXPECT_EQ(
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseText(
     "Bind: 1\n"
     "CA-Cert-Chain: Li4u\n"
-    "Includes-Subdomains: 0\n"
+    "Includes-Subdomains: 27\n"
     "Key: Li4u\n"
     "Key-Type: ECC\n"
     "Name: foo.example.com\n"
@@ -52,32 +100,37 @@ TEST(MessageTest, BindV1TextEncoding) {
     "Signature: Li4u\n"
     "TID: 0\n"
     "Timestamp: 1342885825\n"
-    "\n", out);
+    "\n"));
+  ASSERT_TRUE(msg.get() == NULL);
 }
 
-TEST(MessageTest, BindV1BinaryEncoding) {
-  const uint8_t kBindEntry[] = {
-    0x01, 0x01, 0x03, 0x2e, 0x2e, 0x2e, 0x00, 0x03, 0x2e, 0x2e, 0x2e,
-    0x01, 0x66, 0x6f, 0x6f, 0x2e, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c,
-    0x65, 0x2e, 0x63, 0x6f, 0x6d, 0x00, 0x62, 0x61, 0x72, 0x2e, 0x65,
-    0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65, 0x2e, 0x63, 0x6f, 0x6d, 0x2c,
-    0x62, 0x61, 0x7a, 0x2e, 0x65, 0x78, 0x61, 0x6d, 0x70, 0x6c, 0x65,
-    0x2e, 0x63, 0x6f, 0x6d, 0x00, 0x03, 0x2e, 0x2e, 0x2e, 0x2a, 0x68,
-    0x74, 0x74, 0x70, 0x73, 0x00, 0x03, 0x2e, 0x2e, 0x2e, 0x00, 0xc1,
-    0xcf, 0x0a, 0x50
-  };
-  string data(reinterpret_cast<const char*>(kBindEntry),
-      arraysize(kBindEntry));
-  Slice in(data);
-  Slice orig_in = in;
-  unique_ptr<Message> entry(Message::ParseBinary(&in));
-  ASSERT_TRUE(entry->descriptor() != NULL);
-  EXPECT_STREQ("Bind", entry->descriptor()->GetTypeName());
-  EXPECT_EQ(1, entry->descriptor()->GetVersion());
-  EXPECT_EQ(orig_in.data() + arraysize(kBindEntry), in.data());
-  string out;
-  entry->AppendBinary(&out);
-  EXPECT_EQ(data, out);
+TEST(MessageTest, ParseBinaryErrors) {
+  unique_ptr<Message> msg(Message::ParseBinary(TmpSlice("")));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseBinary(TmpSlice(Unhex("ff01"))));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseBinary(TmpSlice(Unhex("ff01"))));
+  ASSERT_TRUE(msg.get() == NULL);
+  // The following tests break this valid bind entry, so make sure it's
+  // valid to begin with.
+  const char* kBindEntry =
+    "0101032e2e2e00032e2e2e01666f6f2e6578616d706c652e636f6d006261"
+    "722e6578616d706c652e636f6d2c62617a2e6578616d706c652e636f6d00"
+    "032e2e2e2a687474707300032e2e2e00c1cf0a50";
+  msg.reset(Message::ParseBinary(TmpSlice(Unhex(kBindEntry))));
+  ASSERT_TRUE(msg.get() != NULL);
+  msg.reset(Message::ParseBinary(TmpSlice(
+    Unhex(string(kBindEntry, strlen(kBindEntry) - 8)))));
+  ASSERT_TRUE(msg.get() == NULL);
+  msg.reset(Message::ParseBinary(TmpSlice(
+    Unhex(string(kBindEntry, strlen(kBindEntry) - 2)))));
+  ASSERT_TRUE(msg.get() == NULL);
+}
+
+TEST(MessageTest, AcceptsNULLDescriptor) {
+  unique_ptr<Message> msg(new Message(NULL));
+  ASSERT_TRUE(msg.get() != NULL);
+  ASSERT_TRUE(msg->descriptor() == NULL);
 }
 
 }  // namespace sk

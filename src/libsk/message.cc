@@ -167,6 +167,8 @@ Message* Message::ParseBinary(Slice* in) {
   const uint8_t message_type = in->ConsumeFirst();
   const uint8_t version = in->ConsumeFirst();
   std::unique_ptr<Message> message(NewMessageByType(message_type, version));
+  if (message == NULL)
+    return NULL;
   const Descriptor* descriptor = message->descriptor();
   if (descriptor == NULL)
     return NULL;

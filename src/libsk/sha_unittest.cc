@@ -7,29 +7,12 @@
 
 #include "gtest/gtest.h"
 #include "slice.h"
+#include "test_util.h"
 
 using sk::ComputeSHA256;
 using sk::Slice;
+using sk::testing::Unhex;
 using std::string;
-
-namespace {
-int Hex(char c) {
-  if (c >= '0' && c <= '9')
-    return c - '0';
-  if (c >= 'a' && c <= 'f')
-    return 10 + c - 'a';
-  if (c >= 'A' && c <= 'F')
-    return 10 + c - 'A';
-  return 0;
-}
-
-string Unhex(Slice in) {
-  string out;
-  for (size_t i = 0; i < in.length(); i += 2)
-    out.append(1, 16 * Hex(in[i]) + Hex(in[i + 1]));
-  return out;
-}
-}
 
 TEST(SHATest, SHA256) {
   // Generated using a non-OpenSSL SHA-256 implementation.

@@ -23,6 +23,20 @@ vector<string> Sort(const vector<string>& vec) {
   sort(sorted.begin(), sorted.end());
   return sorted;
 }
+
+char HexDigit(int value) {
+  return "0123456789abcdef"[value];
+}
+
+int HexDigitValue(char c) {
+  if (c >= '0' && c <= '9')
+    return c - '0';
+  if (c >= 'a' && c <= 'f')
+    return 10 + c - 'a';
+  if (c >= 'A' && c <= 'F')
+    return 10 + c - 'A';
+  return 0;
+}
 }  // namespace
 
 bool CheckDescriptorFields(const Descriptor* desc) {
@@ -54,6 +68,22 @@ bool CheckDescriptorFields(const Descriptor* desc) {
 
 Slice WithNul(Slice in) {
   return Slice(in.data(), in.length() + 1);
+}
+
+string Unhex(Slice in) {
+  string out;
+  for (size_t i = 0; i < in.length(); i += 2)
+    out.append(1, 16 * HexDigitValue(in[i]) + HexDigitValue(in[i + 1]));
+  return out;
+}
+
+string Hex(Slice in) {
+  string out;
+  for (size_t i = 0; i < in.length(); i++) {
+    out.append(1, HexDigit((in[i] >> 4) & 15));
+    out.append(1, HexDigit(in[i] & 15));
+  }
+  return out;
 }
 }  // namespace testing
 }  // namespace sk
