@@ -16,6 +16,9 @@ class RebindEntry : public LogEntry {
   explicit RebindEntry(int version);
   virtual ~RebindEntry();
 
+  // Gets a descriptor for this message type.
+  static const RebindDescriptor* GetDescriptor(int version);
+
   static RebindEntry* ParseText(Slice in) {
     return static_cast<RebindEntry*>(LogEntry::ParseText(in));
   }

@@ -7,10 +7,18 @@
 namespace sk {
 
 AddRootCAEntry::AddRootCAEntry(int version)
-  : LogEntry(new AddRootCADescriptor(version)) {
+  : LogEntry(GetDescriptor(version)) {
 }
 
 AddRootCAEntry::~AddRootCAEntry() {
+}
+
+// static
+const AddRootCADescriptor* AddRootCAEntry::GetDescriptor(int version) {
+  static AddRootCADescriptor desc(1);
+  if (version == 1)
+    return &desc;
+  return NULL;
 }
 
 }  // namespace sk

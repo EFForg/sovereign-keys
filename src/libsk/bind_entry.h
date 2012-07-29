@@ -16,6 +16,9 @@ class BindEntry : public LogEntry {
   explicit BindEntry(int version);
   virtual ~BindEntry();
 
+  // Gets a descriptor for this message type.
+  static const BindDescriptor* GetDescriptor(int version);
+
   static BindEntry* ParseText(Slice in) {
     return static_cast<BindEntry*>(LogEntry::ParseText(in));
   }

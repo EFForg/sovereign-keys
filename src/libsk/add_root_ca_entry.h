@@ -16,6 +16,9 @@ class AddRootCAEntry : public LogEntry {
   explicit AddRootCAEntry(int version);
   virtual ~AddRootCAEntry();
 
+  // Gets a descriptor for this message type.
+  static const AddRootCADescriptor* GetDescriptor(int version);
+
   static AddRootCAEntry* ParseText(Slice in) {
     return static_cast<AddRootCAEntry*>(LogEntry::ParseText(in));
   }

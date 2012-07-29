@@ -7,10 +7,18 @@
 namespace sk {
 
 RemoveRootCAEntry::RemoveRootCAEntry(int version)
-  : LogEntry(new RemoveRootCADescriptor(version)) {
+  : LogEntry(GetDescriptor(version)) {
 }
 
 RemoveRootCAEntry::~RemoveRootCAEntry() {
+}
+
+// static
+const RemoveRootCADescriptor* RemoveRootCAEntry::GetDescriptor(int version) {
+  static RemoveRootCADescriptor desc(1);
+  if (version == 1)
+    return &desc;
+  return NULL;
 }
 
 }  // namespace sk

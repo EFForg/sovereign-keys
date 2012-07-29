@@ -7,10 +7,18 @@
 namespace sk {
 
 TFM::TFM(int version)
-  : Message(new TFMDescriptor(version)) {
+  : Message(GetDescriptor(version)) {
 }
 
 TFM::~TFM() {
+}
+
+// static
+const TFMDescriptor* TFM::GetDescriptor(int version) {
+  static TFMDescriptor desc(1);
+  if (version == 1)
+    return &desc;
+  return NULL;
 }
 
 }  // namespace sk

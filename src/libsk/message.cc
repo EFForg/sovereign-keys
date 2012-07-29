@@ -20,8 +20,23 @@
 #include "unbind_entry.h"
 #include "value.h"
 
+// This list is used to generate factories to instantiate message instances
+// by type names encoded in ASCII or binary. It should be sorted by expected
+// popularity of a message type.
+#define MESSAGE_TYPES(op) \
+  op(BindEntry); \
+  op(TFM); \
+  op(ChangeServicesEntry); \
+  op(UnbindEntry); \
+  op(RebindEntry); \
+  op(AddRootCAEntry); \
+  op(RemoveRootCAEntry); \
+
 namespace sk {
 namespace {
+// A key and an associated value.
+typedef std::pair<Slice, Slice> KeyValuePair;
+
 // The maximum version number for a message type.
 // This is constrained by the binary encoding which uses one unsigned byte
 // to encode a version number.
@@ -30,7 +45,7 @@ const unsigned int kMaxVersion = 255;
 // Splits |in| into a series of key-value pairs. Keys and values are
 // delimited by ": " and pairs by "\n". Appends key and value Slices to
 // |pairs|. Returns true iff the pairs parse correctly.
-bool SplitFields(Slice in, std::vector<Message::KeyValuePair>* pairs) {
+bool SplitFields(Slice in, std::vector<KeyValuePair>* pairs) {
   while (in.length() > 0) {
     if (in[0] == '\n') {
       // A trailing newline ends the list of pairs.
@@ -48,7 +63,7 @@ bool SplitFields(Slice in, std::vector<Message::KeyValuePair>* pairs) {
       return false;
     }
     // Do not include newline in the value.
-    pairs->push_back(Message::KeyValuePair(
+    pairs->push_back(KeyValuePair(
           Slice(in.data(), end_key),
           Slice(in.data() + end_key + 2, end_pair - (end_key + 2))));
     in.Consume(end_pair + 1);
@@ -57,32 +72,37 @@ bool SplitFields(Slice in, std::vector<Message::KeyValuePair>* pairs) {
   return false;
 }
 
-Message* NewFromDescriptor(const Descriptor* descriptor) {
-  const int message_type = descriptor->GetTypeId();
-  const int version = descriptor->GetVersion();
-#define BUILD(prefix, msg_suffix) \
-  if (message_type == prefix##Descriptor::kTypeId) \
-    return new prefix##msg_suffix(version);
-  BUILD(Bind, Entry);
-  BUILD(Unbind, Entry);
-  BUILD(Rebind, Entry);
-  BUILD(ChangeServices, Entry);
-  BUILD(AddRootCA, Entry);
-  BUILD(RemoveRootCA, Entry);
-  BUILD(TFM, );
+// Returns a new message of the type identified by |name| and |version|,
+// or NULL if there is no such message type.
+Message* NewMessageByName(Slice name, int version) {
+#define BUILD(type) \
+  if (type::GetDescriptor(version) != NULL && \
+      name == type::GetDescriptor(version)->GetTypeName()) \
+    return new type(version);
+  MESSAGE_TYPES(BUILD);
   return NULL;
 #undef BUILD
 }
 
+// Returns a new message of the type identified by |message_type| and |version|,
+// or NULL if there is no such message type.
+Message* NewMessageByType(int message_type, int version) {
+#define BUILD(type) \
+  if (type::GetDescriptor(version) != NULL && \
+      message_type == type::GetDescriptor(version)->GetTypeId()) \
+    return new type(version);
+  MESSAGE_TYPES(BUILD);
+  return NULL;
+#undef BUILD
+}
 }  // namespace
 
 Message::Message(const Descriptor* descriptor)
   : descriptor_(descriptor),
-    values_(descriptor->GetNumFields(), NULL) {
+    values_(descriptor_ ? descriptor->GetNumFields() : 0, NULL) {
 }
 
 Message::~Message() {
-  delete descriptor_;
   for (size_t i = 0; i < values_.size(); i++)
     delete values_[i];
 }
@@ -119,10 +139,25 @@ Message* Message::ParseText(Slice in) {
   if (!ReadDecimalInteger(pairs[0].second, &version) ||
       version > kMaxVersion)
     return NULL;
-  const Descriptor* descriptor = Descriptor::GetByName(pairs[0].first, version);
-  if (descriptor != NULL)
-    return ParseTextFields(descriptor, pairs);
-  return NULL;
+  std::unique_ptr<Message> message(NewMessageByName(pairs[0].first, version));
+  if (message == NULL)
+    return NULL;
+  const Descriptor* descriptor = message->descriptor();
+  if (descriptor == NULL)
+    return NULL;
+  const size_t num_fields = descriptor->GetNumFields();
+  if (num_fields != pairs.size() - 1)
+    return NULL;
+  for (size_t i = 0; i < num_fields; i++) {
+    const Field& spec = descriptor->GetField(i);
+    if (!(pairs[i + 1].first == spec.name))
+      return NULL;
+    message->set_value(i, Value::ParseText(spec.value_type,
+        pairs[i + 1].second));
+    if (message->value(i) == NULL)
+      return NULL;
+  }
+  return message.release();
 }
 
 // static
@@ -131,44 +166,19 @@ Message* Message::ParseBinary(Slice* in) {
     return NULL;
   const uint8_t message_type = in->ConsumeFirst();
   const uint8_t version = in->ConsumeFirst();
-  const Descriptor* descriptor = Descriptor::GetByType(message_type, version);
-  if (descriptor != NULL)
-    return ParseBinaryFields(descriptor, in);
-  return NULL;
-}
-
-Message* Message::ParseTextFields(
-    const Descriptor* descriptor,
-    const std::vector<KeyValuePair>& pairs) {
-  std::unique_ptr<const Descriptor> descriptor_deleter(descriptor);
-  const size_t num_fields = descriptor->GetNumFields();
-  if (num_fields != pairs.size() - 1)
+  std::unique_ptr<Message> message(NewMessageByType(message_type, version));
+  const Descriptor* descriptor = message->descriptor();
+  if (descriptor == NULL)
     return NULL;
-  std::unique_ptr<Message> message(
-      NewFromDescriptor(descriptor_deleter.release()));
-  for (size_t i = 0; i < num_fields; i++) {
-    const Field& spec = descriptor->GetField(i);
-    if (!(pairs[i + 1].first == spec.name))
-      return NULL;
-    message->values_[i] = Value::ParseText(spec.value_type,
-        pairs[i + 1].second);
-    if (message->values_[i] == NULL)
-      return NULL;
-  }
-  return message.release();
-}
-
-Message* Message::ParseBinaryFields(
-    const Descriptor* descriptor,
-    Slice* in) {
-  std::unique_ptr<Message> message(NewFromDescriptor(descriptor));
   const size_t num_fields = descriptor->GetNumFields();
   for (size_t i = 0; i < num_fields; i++) {
     if (in->length() == 0)
       // Truncated.
       return NULL;
     const Field& spec = descriptor->GetField(i);
-    message->values_[i] = Value::ParseBinary(spec.value_type, in);
+    message->set_value(i, Value::ParseBinary(spec.value_type, in));
+    if (message->value(i) == NULL)
+      return NULL;
   }
   return message.release();
 }

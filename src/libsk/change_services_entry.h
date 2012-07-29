@@ -16,6 +16,9 @@ class ChangeServicesEntry : public LogEntry {
   explicit ChangeServicesEntry(int version);
   virtual ~ChangeServicesEntry();
 
+  // Gets a descriptor for this message type.
+  static const ChangeServicesDescriptor* GetDescriptor(int version);
+
   static ChangeServicesEntry* ParseText(Slice in) {
     return static_cast<ChangeServicesEntry*>(LogEntry::ParseText(in));
   }

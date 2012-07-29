@@ -16,6 +16,9 @@ class UnbindEntry : public LogEntry {
   explicit UnbindEntry(int version);
   virtual ~UnbindEntry();
 
+  // Gets a descriptor for this message type.
+  static const UnbindDescriptor* GetDescriptor(int version);
+
   static UnbindEntry* ParseText(Slice in) {
     return static_cast<UnbindEntry*>(LogEntry::ParseText(in));
   }

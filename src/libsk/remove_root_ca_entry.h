@@ -16,6 +16,9 @@ class RemoveRootCAEntry : public LogEntry {
   explicit RemoveRootCAEntry(int version);
   virtual ~RemoveRootCAEntry();
 
+  // Gets a descriptor for this message type.
+  static const RemoveRootCADescriptor* GetDescriptor(int version);
+
   static RemoveRootCAEntry* ParseText(Slice in) {
     return static_cast<RemoveRootCAEntry*>(LogEntry::ParseText(in));
   }

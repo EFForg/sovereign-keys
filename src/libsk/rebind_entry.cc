@@ -7,10 +7,18 @@
 namespace sk {
 
 RebindEntry::RebindEntry(int version)
-  : LogEntry(new RebindDescriptor(version)) {
+  : LogEntry(GetDescriptor(version)) {
 }
 
 RebindEntry::~RebindEntry() {
+}
+
+// static
+const RebindDescriptor* RebindEntry::GetDescriptor(int version) {
+  static RebindDescriptor desc(1);
+  if (version == 1)
+    return &desc;
+  return NULL;
 }
 
 }  // namespace sk

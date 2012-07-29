@@ -20,18 +20,20 @@ class Descriptor;
 // Derived classes provide more efficient named accessors.
 class Message {
  public:
-  typedef std::pair<Slice, Slice> KeyValuePair;
+  // |descriptor| specifies the layout of this message's fields; if it is
+  // NULL, no methods besides descriptor() should be called on the instance.
+  explicit Message(const Descriptor* descriptor);
   virtual ~Message();
 
-  // Takes ownership of descriptor.
-  explicit Message(const Descriptor* descriptor);
-
+  // These methods parse the message from |in| using some encoding.
   static Message* ParseText(Slice in);
   static Message* ParseBinary(Slice* in);
 
+  // These methods append the message to a string using some encoding.
   void AppendText(std::string* out) const;
   void AppendBinary(std::string* out) const;
 
+  // Returns the descriptor this message was created with.
   const Descriptor* descriptor() const { return descriptor_; }
 
   // Retains ownership of returned pointer.
@@ -45,12 +47,6 @@ class Message {
 
  private:
   DISALLOW_EVIL_CONSTRUCTORS(Message);
-
-  static Message* ParseTextFields(
-      const Descriptor* descriptor,
-      const std::vector<KeyValuePair>& fields);
-  static Message* ParseBinaryFields(
-      const Descriptor* descriptor, Slice* in);
 
   // Description of this message's name and fields.
   const Descriptor* descriptor_;

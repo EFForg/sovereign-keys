@@ -7,10 +7,18 @@
 namespace sk {
 
 UnbindEntry::UnbindEntry(int version)
-  : LogEntry(new UnbindDescriptor(version)) {
+  : LogEntry(GetDescriptor(version)) {
 }
 
 UnbindEntry::~UnbindEntry() {
+}
+
+// static
+const UnbindDescriptor* UnbindEntry::GetDescriptor(int version) {
+  static UnbindDescriptor desc(1);
+  if (version == 1)
+    return &desc;
+  return NULL;
 }
 
 }  // namespace sk

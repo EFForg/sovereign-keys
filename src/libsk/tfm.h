@@ -17,6 +17,9 @@ class TFM : public Message {
   explicit TFM(int version);
   virtual ~TFM();
 
+  // Gets a descriptor for this message type.
+  static const TFMDescriptor* GetDescriptor(int version);
+
   static TFM* ParseText(Slice in) {
     return static_cast<TFM*>(Message::ParseText(in));
   }
