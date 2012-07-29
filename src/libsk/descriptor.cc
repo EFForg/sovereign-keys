@@ -8,6 +8,7 @@
 #include "rebind_descriptor.h"
 #include "remove_root_ca_descriptor.h"
 #include "slice.h"
+#include "tfm_descriptor.h"
 #include "unbind_descriptor.h"
 
 namespace sk {
@@ -21,41 +22,33 @@ Descriptor::~Descriptor() {
 
 // static
 const Descriptor* Descriptor::GetByName(Slice name, int version) {
-  if (name == BindDescriptor::kTypeName &&
-      BindDescriptor::IsVersionSupported(version))
-    return new BindDescriptor(version);
-  else if (name == ChangeServicesDescriptor::kTypeName &&
-      ChangeServicesDescriptor::IsVersionSupported(version))
-    return new ChangeServicesDescriptor(version);
-  else if (name == UnbindDescriptor::kTypeName &&
-      UnbindDescriptor::IsVersionSupported(version))
-    return new UnbindDescriptor(version);
-  else if (name == RebindDescriptor::kTypeName &&
-      RebindDescriptor::IsVersionSupported(version))
-    return new RebindDescriptor(version);
-  else if (name == AddRootCADescriptor::kTypeName &&
-           AddRootCADescriptor::IsVersionSupported(version))
-    return new AddRootCADescriptor(version);
-  else if (name == RemoveRootCADescriptor::kTypeName &&
-           RemoveRootCADescriptor::IsVersionSupported(version))
-    return new RemoveRootCADescriptor(version);
+#define BUILD(type) \
+  if (name == type::kTypeName && type::IsVersionSupported(version)) \
+    return new type(version);
+  BUILD(BindDescriptor);
+  BUILD(ChangeServicesDescriptor);
+  BUILD(UnbindDescriptor);
+  BUILD(RebindDescriptor);
+  BUILD(AddRootCADescriptor);
+  BUILD(RemoveRootCADescriptor);
+  BUILD(TFMDescriptor);
   return NULL;
+#undef BUILD
 }
 
 // static
 const Descriptor* Descriptor::GetByType(int entry_type, int version) {
-  if (entry_type == BindDescriptor::kTypeId &&
-      BindDescriptor::IsVersionSupported(version))
-    return new BindDescriptor(version);
-  else if (entry_type == ChangeServicesDescriptor::kTypeId &&
-      ChangeServicesDescriptor::IsVersionSupported(version))
-    return new ChangeServicesDescriptor(version);
-  else if (entry_type == UnbindDescriptor::kTypeId &&
-      UnbindDescriptor::IsVersionSupported(version))
-    return new UnbindDescriptor(version);
-  else if (entry_type == RebindDescriptor::kTypeId &&
-      RebindDescriptor::IsVersionSupported(version))
-    return new RebindDescriptor(version);
+#define BUILD(type) \
+  if (entry_type == type::kTypeId && type::IsVersionSupported(version)) \
+    return new type(version);
+  BUILD(BindDescriptor);
+  BUILD(ChangeServicesDescriptor);
+  BUILD(UnbindDescriptor);
+  BUILD(RebindDescriptor);
+  BUILD(AddRootCADescriptor);
+  BUILD(RemoveRootCADescriptor);
+  BUILD(TFMDescriptor);
   return NULL;
+#undef BUILD
 }
 }  // namespace sk

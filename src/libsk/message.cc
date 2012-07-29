@@ -10,14 +10,14 @@
 #include "add_root_ca_entry.h"
 #include "bind_entry.h"
 #include "change_services_entry.h"
+#include "decimal_integer.h"
+#include "descriptor.h"
+#include "field.h"
 #include "rebind_entry.h"
 #include "remove_root_ca_entry.h"
-#include "unbind_entry.h"
-
-#include "descriptor.h"
-#include "decimal_integer.h"
-#include "field.h"
 #include "slice.h"
+#include "tfm.h"
+#include "unbind_entry.h"
 #include "value.h"
 
 namespace sk {
@@ -60,19 +60,18 @@ bool SplitFields(Slice in, std::vector<Message::KeyValuePair>* pairs) {
 Message* NewFromDescriptor(const Descriptor* descriptor) {
   const int message_type = descriptor->GetTypeId();
   const int version = descriptor->GetVersion();
-  if (message_type == BindDescriptor::kTypeId)
-    return new BindEntry(version);
-  else if (message_type == UnbindDescriptor::kTypeId)
-    return new UnbindEntry(version);
-  else if (message_type == RebindDescriptor::kTypeId)
-    return new RebindEntry(version);
-  else if (message_type == ChangeServicesDescriptor::kTypeId)
-    return new ChangeServicesEntry(version);
-  else if (message_type == AddRootCADescriptor::kTypeId)
-    return new AddRootCAEntry(version);
-  else if (message_type == RemoveRootCADescriptor::kTypeId)
-    return new RemoveRootCAEntry(version);
+#define BUILD(prefix, msg_suffix) \
+  if (message_type == prefix##Descriptor::kTypeId) \
+    return new prefix##msg_suffix(version);
+  BUILD(Bind, Entry);
+  BUILD(Unbind, Entry);
+  BUILD(Rebind, Entry);
+  BUILD(ChangeServices, Entry);
+  BUILD(AddRootCA, Entry);
+  BUILD(RemoveRootCA, Entry);
+  BUILD(TFM, );
   return NULL;
+#undef BUILD
 }
 
 }  // namespace
