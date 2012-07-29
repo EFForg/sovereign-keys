@@ -20,7 +20,7 @@ TEST(RemoveRootCADescriptorTest, Sanity) {
       unique_ptr<RemoveRootCADescriptor> desc(new RemoveRootCADescriptor(version));
       ASSERT_TRUE(desc.get() != NULL);
       EXPECT_STREQ("Remove-Root-CA", desc->GetTypeName());
-      EXPECT_EQ(6, desc->GetTypeId());
+      EXPECT_EQ(7, desc->GetTypeId());
       EXPECT_LE(prev_version_num_fields, desc->GetNumFields());
       EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
       prev_version_num_fields = desc->GetNumFields();
