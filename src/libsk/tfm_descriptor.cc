@@ -50,10 +50,4 @@ size_t TFMDescriptor::GetNumFields() const {
 const Field& TFMDescriptor::GetField(size_t index) const {
   return kTFMFields[index];
 }
-
-// static
-bool TFMDescriptor::IsVersionSupported(int version) {
-  return version == 1;
-}
-
 }  // namespace sk

@@ -14,23 +14,16 @@ using std::unique_ptr;
 namespace sk {
 
 TEST(TFMDescriptorTest, Sanity) {
-  size_t prev_version_num_fields = 0;
-  for (int version = 1; version < 255; version++) {
-    if (TFMDescriptor::IsVersionSupported(version)) {
-      unique_ptr<TFMDescriptor> desc(new TFMDescriptor(version));
-      ASSERT_TRUE(desc.get() != NULL);
-      EXPECT_STREQ("TFM", desc->GetTypeName());
-      EXPECT_EQ(0, desc->GetTypeId());
-      EXPECT_LE(prev_version_num_fields, desc->GetNumFields());
-      EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
-      prev_version_num_fields = desc->GetNumFields();
-    }
-  }
+  unique_ptr<TFMDescriptor> desc(new TFMDescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
+  EXPECT_STREQ("TFM", desc->GetTypeName());
+  EXPECT_EQ(0, desc->GetTypeId());
+  EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
 }
 
 TEST(TFMDescriptorTest, Fields) {
-  ASSERT_TRUE(TFMDescriptor::IsVersionSupported(1));
   unique_ptr<TFMDescriptor> desc(new TFMDescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
   EXPECT_STREQ("Max-Published-SN",
       desc->GetField(TFMDescriptor::kMaxPublishedSN).name);
   EXPECT_STREQ("Max-Published-Timestamp",

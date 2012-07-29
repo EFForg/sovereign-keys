@@ -15,13 +15,6 @@ class Field;
 // Describes the fields in a Rebind log entry (see RebindEntry).
 class RebindDescriptor : public Descriptor {
  public:
-  // The type name for plaintext serialization.
-  static const char* const kTypeName;
-
-  // The type code for binary serialization.
-  static const int kTypeId;
-
-  // Indices of fields, used for fast accessors.
   enum {
     kCACertChain = 0,
     kIncludesSubdomains = 1,
@@ -39,6 +32,9 @@ class RebindDescriptor : public Descriptor {
     kTimestamp = 13
   };
 
+  static const char* const kTypeName;
+  static const int kTypeId;
+
   explicit RebindDescriptor(int version);
   virtual ~RebindDescriptor();
 
@@ -47,9 +43,6 @@ class RebindDescriptor : public Descriptor {
   virtual int GetTypeId() const OVERRIDE;
   virtual size_t GetNumFields() const OVERRIDE;
   virtual const Field& GetField(size_t index) const OVERRIDE;
-
-  // Returns true iff this class supports |version|.
-  static bool IsVersionSupported(int version);
 };
 
 }  // namespace sk

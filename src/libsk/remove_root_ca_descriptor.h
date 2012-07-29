@@ -15,13 +15,6 @@ class Field;
 // Describes the fields in a Remove-Root-CA log entry (see RemoveRootCAEntry).
 class RemoveRootCADescriptor : public Descriptor {
  public:
-  // The type name for plaintext serialization.
-  static const char* const kTypeName;
-
-  // The type code for binary serialization.
-  static const int kTypeId;
-
-  // Indices of fields, used for fast accessors.
   enum {
     kCACertHash = 0,
     kSN = 1,
@@ -29,6 +22,9 @@ class RemoveRootCADescriptor : public Descriptor {
     kTID = 3,
     kTimestamp = 4
   };
+
+  static const char* const kTypeName;
+  static const int kTypeId;
 
   explicit RemoveRootCADescriptor(int version);
   virtual ~RemoveRootCADescriptor();
@@ -38,9 +34,6 @@ class RemoveRootCADescriptor : public Descriptor {
   virtual int GetTypeId() const OVERRIDE;
   virtual size_t GetNumFields() const OVERRIDE;
   virtual const Field& GetField(size_t index) const OVERRIDE;
-
-  // Returns true iff this class supports |version|.
-  static bool IsVersionSupported(int version);
 };
 
 }  // namespace sk

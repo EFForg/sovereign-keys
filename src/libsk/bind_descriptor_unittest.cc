@@ -14,23 +14,16 @@ using std::unique_ptr;
 namespace sk {
 
 TEST(BindDescriptorTest, Sanity) {
-  size_t prev_version_num_fields = 0;
-  for (int version = 1; version < 255; version++) {
-    if (BindDescriptor::IsVersionSupported(version)) {
-      unique_ptr<BindDescriptor> desc(new BindDescriptor(version));
-      ASSERT_TRUE(desc.get() != NULL);
-      EXPECT_STREQ("Bind", desc->GetTypeName());
-      EXPECT_EQ(1, desc->GetTypeId());
-      EXPECT_LE(prev_version_num_fields, desc->GetNumFields());
-      EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
-      prev_version_num_fields = desc->GetNumFields();
-    }
-  }
+  unique_ptr<BindDescriptor> desc(new BindDescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
+  EXPECT_STREQ("Bind", desc->GetTypeName());
+  EXPECT_EQ(1, desc->GetTypeId());
+  EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
 }
 
 TEST(BindDescriptorTest, Fields) {
-  ASSERT_TRUE(BindDescriptor::IsVersionSupported(1));
   unique_ptr<BindDescriptor> desc(new BindDescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
   EXPECT_STREQ("CA-Cert-Chain",
       desc->GetField(BindDescriptor::kCACertChain).name);
   EXPECT_STREQ("Includes-Subdomains",

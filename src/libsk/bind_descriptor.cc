@@ -55,10 +55,4 @@ size_t BindDescriptor::GetNumFields() const {
 const Field& BindDescriptor::GetField(size_t index) const {
   return kBindFields[index];
 }
-
-// static
-bool BindDescriptor::IsVersionSupported(int version) {
-  return version == 1;
-}
-
 }  // namespace sk

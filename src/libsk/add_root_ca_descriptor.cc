@@ -48,10 +48,4 @@ size_t AddRootCADescriptor::GetNumFields() const {
 const Field& AddRootCADescriptor::GetField(size_t index) const {
   return kAddRootCAFields[index];
 }
-
-// static
-bool AddRootCADescriptor::IsVersionSupported(int version) {
-  return version == 1;
-}
-
 }  // namespace sk

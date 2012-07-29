@@ -50,10 +50,4 @@ size_t ChangeServicesDescriptor::GetNumFields() const {
 const Field& ChangeServicesDescriptor::GetField(size_t index) const {
   return kChangeServicesFields[index];
 }
-
-// static
-bool ChangeServicesDescriptor::IsVersionSupported(int version) {
-  return version == 1;
-}
-
 }  // namespace sk

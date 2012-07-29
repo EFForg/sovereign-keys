@@ -48,10 +48,4 @@ size_t RemoveRootCADescriptor::GetNumFields() const {
 const Field& RemoveRootCADescriptor::GetField(size_t index) const {
   return kRemoveRootCAFields[index];
 }
-
-// static
-bool RemoveRootCADescriptor::IsVersionSupported(int version) {
-  return version == 1;
-}
-
 }  // namespace sk

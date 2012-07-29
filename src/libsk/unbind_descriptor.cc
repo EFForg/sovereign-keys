@@ -50,10 +50,4 @@ size_t UnbindDescriptor::GetNumFields() const {
 const Field& UnbindDescriptor::GetField(size_t index) const {
   return kUnbindFields[index];
 }
-
-// static
-bool UnbindDescriptor::IsVersionSupported(int version) {
-  return version == 1;
-}
-
 }  // namespace sk

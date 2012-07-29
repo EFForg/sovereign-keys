@@ -14,23 +14,16 @@ using std::unique_ptr;
 namespace sk {
 
 TEST(AddRootCADescriptorTest, Sanity) {
-  size_t prev_version_num_fields = 0;
-  for (int version = 1; version < 255; version++) {
-    if (AddRootCADescriptor::IsVersionSupported(version)) {
-      unique_ptr<AddRootCADescriptor> desc(new AddRootCADescriptor(version));
-      ASSERT_TRUE(desc.get() != NULL);
-      EXPECT_STREQ("Add-Root-CA", desc->GetTypeName());
-      EXPECT_EQ(6, desc->GetTypeId());
-      EXPECT_LE(prev_version_num_fields, desc->GetNumFields());
-      EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
-      prev_version_num_fields = desc->GetNumFields();
-    }
-  }
+  unique_ptr<AddRootCADescriptor> desc(new AddRootCADescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
+  EXPECT_STREQ("Add-Root-CA", desc->GetTypeName());
+  EXPECT_EQ(6, desc->GetTypeId());
+  EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
 }
 
 TEST(AddRootCADescriptorTest, Fields) {
-  ASSERT_TRUE(AddRootCADescriptor::IsVersionSupported(1));
   unique_ptr<AddRootCADescriptor> desc(new AddRootCADescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
   EXPECT_STREQ("CA-Cert",
       desc->GetField(AddRootCADescriptor::kCACert).name);
   EXPECT_STREQ("SN",

@@ -14,23 +14,16 @@ using std::unique_ptr;
 namespace sk {
 
 TEST(UnbindDescriptorTest, Sanity) {
-  size_t prev_version_num_fields = 0;
-  for (int version = 1; version < 255; version++) {
-    if (UnbindDescriptor::IsVersionSupported(version)) {
-      unique_ptr<UnbindDescriptor> desc(new UnbindDescriptor(version));
-      ASSERT_TRUE(desc.get() != NULL);
-      EXPECT_STREQ("Unbind", desc->GetTypeName());
-      EXPECT_EQ(2, desc->GetTypeId());
-      EXPECT_LE(prev_version_num_fields, desc->GetNumFields());
-      EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
-      prev_version_num_fields = desc->GetNumFields();
-    }
-  }
+  unique_ptr<UnbindDescriptor> desc(new UnbindDescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
+  EXPECT_STREQ("Unbind", desc->GetTypeName());
+  EXPECT_EQ(2, desc->GetTypeId());
+  EXPECT_TRUE(testing::CheckDescriptorFields(desc.get()));
 }
 
 TEST(UnbindDescriptorTest, Fields) {
-  ASSERT_TRUE(UnbindDescriptor::IsVersionSupported(1));
   unique_ptr<UnbindDescriptor> desc(new UnbindDescriptor(1));
+  ASSERT_TRUE(desc.get() != NULL);
   EXPECT_STREQ("Last-Secure-Timestamp",
       desc->GetField(UnbindDescriptor::kLastSecureTimestamp).name);
   EXPECT_STREQ("Name",
