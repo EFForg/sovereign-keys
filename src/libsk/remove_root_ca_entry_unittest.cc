@@ -24,9 +24,6 @@ TEST(RemoveRootCAEntryTest, Accessors) {
     "Timestamp: 1342885825\n"
     "\n"));
   ASSERT_TRUE(entry.get() != NULL);
-  ASSERT_TRUE(entry->descriptor() != NULL);
-  EXPECT_STREQ("Remove-Root-CA", entry->descriptor()->GetTypeName());
-  EXPECT_EQ(1, entry->descriptor()->GetVersion());
   EXPECT_EQ("...", entry->ca_cert_hash());
   EXPECT_EQ(42U, entry->sn());
   EXPECT_EQ("...", entry->signature());

@@ -26,9 +26,6 @@ TEST(UnbindEntryTest, Accessors) {
     "Timestamp: 1342885825\n"
     "\n"));
   ASSERT_TRUE(entry.get() != NULL);
-  ASSERT_TRUE(entry->descriptor() != NULL);
-  EXPECT_STREQ("Unbind", entry->descriptor()->GetTypeName());
-  EXPECT_EQ(1, entry->descriptor()->GetVersion());
   EXPECT_EQ(1342885822U, entry->last_secure_timestamp());
   EXPECT_EQ("foo.example.com", entry->name());
   EXPECT_EQ("...", entry->sk_signature());

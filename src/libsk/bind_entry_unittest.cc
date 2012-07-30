@@ -33,9 +33,6 @@ TEST(BindEntryTest, Getters) {
     "Timestamp: 1342885825\n"
     "\n"));
   ASSERT_TRUE(entry.get() != NULL);
-  ASSERT_TRUE(entry->descriptor() != NULL);
-  EXPECT_STREQ("Bind", entry->descriptor()->GetTypeName());
-  EXPECT_EQ(1, entry->descriptor()->GetVersion());
   EXPECT_EQ("...", entry->ca_cert_chain());
   EXPECT_FALSE(entry->includes_subdomains());
   EXPECT_EQ("...", entry->key());

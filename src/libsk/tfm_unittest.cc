@@ -27,9 +27,6 @@ TEST(TFMTest, Getters) {
     "Timestamp: 2000\n"
     "\n"));
   ASSERT_TRUE(tfm.get() != NULL);
-  ASSERT_TRUE(tfm->descriptor() != NULL);
-  EXPECT_STREQ("TFM", tfm->descriptor()->GetTypeName());
-  EXPECT_EQ(1, tfm->descriptor()->GetVersion());
   EXPECT_EQ(42U, tfm->max_published_sn());
   EXPECT_EQ(1000U, tfm->max_published_timestamp());
   EXPECT_EQ(57U, tfm->max_sn());

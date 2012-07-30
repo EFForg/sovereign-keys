@@ -27,9 +27,6 @@ TEST(ChangeServicesEntryTest, Getters) {
     "Timestamp: 1342885825\n"
     "\n"));
   ASSERT_TRUE(entry.get() != NULL);
-  ASSERT_TRUE(entry->descriptor() != NULL);
-  EXPECT_STREQ("Change-Services", entry->descriptor()->GetTypeName());
-  EXPECT_EQ(1, entry->descriptor()->GetVersion());
   EXPECT_EQ("foo.example.com", entry->name());
   EXPECT_EQ("...", entry->sk_signature());
   EXPECT_EQ(42U, entry->sn());
