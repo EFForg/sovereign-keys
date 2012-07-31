@@ -20,8 +20,8 @@ class Message {
 
 %extend Message {
   %feature("docstring", "Parses a Message from plaintext and returns it.")
-           ParseText;
-  static sk::Message* ParseText(PyObject* text) {
+           parse_text;
+  static sk::Message* parse_text(PyObject* text) {
     char* buf;
     Py_ssize_t length;
     PyString_AsStringAndSize(text, &buf, &length);
@@ -31,8 +31,8 @@ class Message {
 
   %feature("docstring",
            "Parses a Message from binary data and returns (Message, size).")
-           ParseBinary;
-  static PyObject* ParseBinary(PyObject* binary_message) {
+           parse_binary;
+  static PyObject* parse_binary(PyObject* binary_message) {
     char* buf;
     Py_ssize_t length;
     PyString_AsStringAndSize(binary_message, &buf, &length);
@@ -44,15 +44,15 @@ class Message {
     return PyTuple_Pack(2, msg_obj, PyInt_FromSsize_t(slice.data() - data));
   }
 
-  %feature("docstring", "Serializes message as plaintext.") WriteText;
-  PyObject* WriteText() const {
+  %feature("docstring", "Serializes message as plaintext.") write_text;
+  PyObject* write_text() const {
     std::string out;
     self->AppendText(&out);
     return PyString_FromStringAndSize(out.c_str(), out.size());
   }
 
-  %feature("docstring", "Serializes message as binary data.") WriteBinary;
-  PyObject* WriteBinary() const {
+  %feature("docstring", "Serializes message as binary data.") write_binary;
+  PyObject* write_binary() const {
     std::string out;
     self->AppendBinary(&out);
     return PyString_FromStringAndSize(out.c_str(), out.size());
