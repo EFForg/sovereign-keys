@@ -1,6 +1,9 @@
+import os
+import sys
+
 GTEST_DIR = 'third_party/gtest-1.6.0'
 
-env = Environment(CXXFLAGS = '-g -Wall -Wextra -pedantic -std=c++0x')
+env = Environment(CXXFLAGS = '-g -fPIC -Wall -Wextra -pedantic -std=c++0x')
 envTest = Environment(CPPPATH = [GTEST_DIR, GTEST_DIR + '/include'],
                       CXXFLAGS = '-g -Wall -Wextra -pedantic -std=c++0x')
 
@@ -9,6 +12,23 @@ envTest.Library(target = 'gtest',
 
 envTest.Library(target = 'gtest_main',
                 source = GTEST_DIR + '/src/gtest_main.cc')
+
+Alias('swig',
+      env.LoadableModule('sk', 'libsk/sk.i',
+        SWIGFLAGS = '-c++ -python -shadow -Wall'.split(),
+        CPPPATH = [
+          'libsk',
+          os.path.join(sys.prefix, 'include', 'python%d.%d' % (
+            sys.version_info[0], sys.version_info[1]))
+          ],
+        CCFLAGS = '-O',
+        LIBPATH = '.',
+        LIBS = ['ssl', 'crypto', 'libsk'],
+        LDMODULEPREFIX = '_',
+        LDMODULESUFFIX = '.so',
+        FRAMEWORKSFLAGS = '-flat_namespace -undefined suppress',
+      )
+)
 
 env.Library(target = 'libsk',
             source = [
