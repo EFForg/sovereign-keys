@@ -27,6 +27,10 @@ class MessageTestCase(unittest.TestCase):
         self.assertIsNotNone(message)
         self.assertEqual(text, message.write_text())
 
+    def testTextParseError(self):
+        with self.assertRaises(ValueError):
+            _ = sk.Message.parse_text('bogus')
+
     def testBinarySerialization_Sanity(self):
         # Note this message contains an embedded NUL to test for C string
         # termination issues.
@@ -36,6 +40,46 @@ class MessageTestCase(unittest.TestCase):
         self.assertIsNotNone(message)
         self.assertEqual(len(data), size)
         self.assertEqual(data, message.write_binary())
+
+    def testParseBinaryError(self):
+        with self.assertRaises(ValueError):
+            _, _ = sk.Message.parse_binary('bogus')
+
+
+class TFMTestCase(unittest.TestCase):
+    """Tests the TFM wrapper class."""
+
+    text = ''.join([
+        'TFM: 1\n'
+        'Max-Published-SN: 42\n'
+        'Max-Published-Timestamp: 1000\n'
+        'Max-SN: 57\n'
+        'Max-Timestamp: 1100\n'
+        'Signature: Li4u\n'
+        'TID: 0\n'
+        'Timestamp: 2000\n'
+        '\n'])
+
+    def testGetters(self):
+        tfm = sk.TFM.parse_text(TFMTestCase.text)
+        self.assertEquals(42, tfm.get_max_published_sn())
+        self.assertEquals(1000, tfm.get_max_published_timestamp())
+        self.assertEquals(57, tfm.get_max_sn())
+        self.assertEquals(1100, tfm.get_max_timestamp())
+        self.assertEquals('...', tfm.get_signature())
+        self.assertEquals(0, tfm.get_tid())
+        self.assertEquals(2000, tfm.get_timestamp())
+
+    def testSetters(self):
+        tfm = sk.TFM(1)
+        tfm.set_max_published_sn(42)
+        tfm.set_max_published_timestamp(1000)
+        tfm.set_max_sn(57)
+        tfm.set_max_timestamp(1100)
+        tfm.set_signature('...')
+        tfm.set_tid(0)
+        tfm.set_timestamp(2000)
+        self.assertEquals(TFMTestCase.text, tfm.write_text())
 
 
 if __name__ == '__main__':
